@@ -1,3 +1,4 @@
+HEAD
 \# Puissance 4 — Projet Majeure
 
 
@@ -50,3 +51,5 @@ Cloe Harscoet
 
 
 
+# jeu-puissance4
+Puissance 4 — projet majeure
