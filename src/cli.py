@@ -1,6 +1,7 @@
 # src/cli.py
 from src.board import Board, EMPTY, PLAYER, AI
 from src.rules import is_winning_move, is_draw
+from src import ai as ai_mod
 
 SYMBOLS = {EMPTY: '.', PLAYER: 'X', AI: 'O'}
 
@@ -28,8 +29,19 @@ def ask_column(board):
         except ValueError:
             print("Please enter a number.")
 
+def choose_mode():
+    print("Select mode:")
+    print("1) Human vs Random AI")
+    print("2) Human vs Heuristic AI")
+    while True:
+        choice = input("Choose 1 or 2 (default 1): ").strip() or "1"
+        if choice in ("1","2"):
+            return int(choice)
+        print("Enter 1 or 2.")
+
 def play_console(rows=6, cols=7):
     board = Board(rows=rows, cols=cols)
+    mode = choose_mode()
     current = PLAYER
     print("\nStarting Puissance4 (console).")
     while True:
@@ -40,20 +52,29 @@ def play_console(rows=6, cols=7):
                 print("Bye.")
                 break
             board.drop(col, PLAYER)
+            print(f"Player X -> column {col}")
             if is_winning_move(board):
                 print(render(board))
                 print("Player X wins!")
                 break
             current = AI
         else:
-            # simple AI: first available move
+            # AI turn
             valid = board.get_valid_moves()
+            print("AI debug: valid moves =", valid)
             if not valid:
                 print("No moves left.")
                 break
-            col = valid[0]
-            board.drop(col, AI)
-            print(f"AI places in column {col}")
+            if mode == 1:
+                move, score = ai_mod.random_ai(board)
+                print(f"AI chosen (random) -> col {move}")
+            else:
+                move, score = ai_mod.heuristic_ai(board, AI)
+                print(f"AI chosen (heuristic) -> col {move} with score {score}")
+            if move is None:
+                print("AI cannot move.")
+                break
+            board.drop(move, AI)
             if is_winning_move(board):
                 print(render(board))
                 print("AI O wins!")
