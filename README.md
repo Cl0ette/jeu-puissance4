@@ -76,7 +76,73 @@ tests/test_rules.py — tests unitaires pour les règles.
 README.md — ce fichier.
 
 docs/ — notes et design.
+_______________________________________
+Puissance4 — projet Python
+Description
 
+Implementation d’un jeu Puissance4 en Python : plateau, règles, heuristique et interface console ASCII.
+
+Statut actuel
+
+Board : drop, undo, is_valid, get_valid_moves, serialize (tests unitaires présents).
+
+Rules : is_winning_move optimisée autour du dernier coup, is_draw (tests présents).
+
+CLI : src/cli.py — rendu ASCII et boucle de jeu console (saisie colonne, alternance, quit).
+
+Heuristique : src/heuristic.py — fenêtres de 4, pondération du centre, scores pour 4/3/2 pièces.
+
+Tests : tests pour Board, Rules et Heuristic (pytest).
+
+Arborescence
+
+src/board.py
+
+src/rules.py
+
+src/heuristic.py
+
+src/cli.py
+
+tests/test_board.py
+
+tests/test_rules.py
+
+tests/test_heuristic.py
+
+docs/
+
+Installation
+
+Ouvrir le projet: cd C:\Users\cloeh\jeu-puissance4
+
+Activer l’environnement: .venv\Scripts\Activate
+
+Installer dépendances: python -m pip install -U pip python -m pip install pytest
+
+Exécution des tests
+
+Lancer tous les tests : python -m pytest -q
+
+Lancer la boucle console
+
+Démarrer une partie en console : python -m src.cli
+
+Commandes :
+
+entrer un numéro de colonne pour jouer
+
+entrer q pour quitter
+
+IA : choix du premier coup valide (IA basique)
+
+Notes d’implémentation
+
+Heuristique : analyse toutes les fenêtres de longueur 4 (horizontales, verticales, diagonales), applique des scores pour 4/3/2 en faveur ou contre, et renforce la présence au centre pour favoriser positions centrales.
+
+Détection victoire : is_winning_move ne vérifie que l’entourage du dernier coup, complexité constante par coup.
+
+Stockage : grille par colonnes pour simplifier drop/undo.
 
 
 # jeu-puissance4
