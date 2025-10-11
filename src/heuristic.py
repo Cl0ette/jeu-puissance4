@@ -13,13 +13,13 @@ def score_window(window, piece):
     cnt = Counter(window)
     if cnt[piece] == 4:
         return SCORE_FOUR
-    if cnt[piece] == 3 and cnt[EMPTY] == 1:
+    elif cnt[piece] == 3 and cnt[EMPTY] == 1:
         return SCORE_THREE
-    if cnt[piece] == 2 and cnt[EMPTY] == 2:
+    elif cnt[piece] == 2 and cnt[EMPTY] == 2:
         return SCORE_TWO
-    if cnt[opp] == 3 and cnt[EMPTY] == 1:
+    elif cnt[opp] == 3 and cnt[EMPTY] == 1:
         return -SCORE_THREE
-    if cnt[opp] == 4:
+    elif cnt[opp] == 4:
         return -SCORE_FOUR
     return 0
 
