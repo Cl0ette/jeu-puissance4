@@ -14,18 +14,18 @@ class Board:
     def __init__(self, rows=ROWS, cols=COLS):
         self.rows = rows
         self.cols = cols
-        self.grid = [[EMPTY for _ in range(rows)] for _ in range(cols)]
-        self.heights = [0] * cols
-        self.last_move = None  # (col, row, piece)
+        self.grid = [[EMPTY for _ in range(rows)] for _ in range(cols)] # creer le plateau vide
+        self.heights = [0] * cols # permet de savoir le nb de pions empilés
+        self.last_move = None  # connaitre le dernier coup joué
 
-    def is_valid(self, col):
-        return 0 <= col < self.cols and self.heights[col] < self.rows
+    def is_valid(self, col): #permet de vérifier si le coup est possible
+        return 0 <= col < self.cols and self.heights[col] < self.rows # a réécrire pour plus claire
 
-    def get_valid_moves(self):
+    def get_valid_moves(self): #renvooi les coups valide
         return [c for c in range(self.cols) if self.is_valid(c)]
 
-    def drop(self, col, piece):
-        if not self.is_valid(col):
+    def drop(self, col, piece):# ajoute un pion dans la colonne
+        if not self.is_valid(col): #verifie que la colonne est accessible
             raise ValueError("Colonne invalide ou pleine")
         row = self.heights[col]
         self.grid[col][row] = piece
@@ -33,7 +33,7 @@ class Board:
         self.last_move = (col, row, piece)
         return row
 
-    def undo(self, col):
+    def undo(self, col):# supprime le dernier coup joué
         if not (0 <= col < self.cols):
             raise ValueError("Colonne invalide")
         if self.heights[col] == 0:
@@ -43,13 +43,13 @@ class Board:
         self.grid[col][row] = EMPTY
         self.last_move = None
 
-    def is_full(self):
+    def is_full(self):# permet de dire quand le plateau est plein
         return all(h == self.rows for h in self.heights)
 
-    def serialize(self):
+    def serialize(self):# ia / permet de figer le plateau
         return tuple(tuple(col) for col in self.grid)
 
-    def copy(self):
+    def copy(self): #fait une copie du plateau
         b = Board(self.rows, self.cols)
         b.grid = [col.copy() for col in self.grid]
         b.heights = self.heights.copy()

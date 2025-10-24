@@ -8,8 +8,12 @@ SCORE_THREE = 10
 SCORE_TWO = 1
 CENTER_WEIGHT = 3
 
-def score_window(window, piece):
-    opp = PLAYER if piece == AI else AI
+def score_window(window, piece): # systeme de récompense en fonction du nb de piece dans une zone
+    if piece == AI:
+        opp = PLAYER
+    else:
+        opp = AI
+    # opp = PLAYER if piece == AI else AI
     cnt = Counter(window)
     if cnt[piece] == 4:
         return SCORE_FOUR
@@ -31,13 +35,29 @@ def heuristic(board, piece):
     score = 0
 
     center_col = cols // 2
-    center_count = sum(1 for r in range(rows) if grid[center_col][r] == piece)
-    score += center_count * CENTER_WEIGHT
+    
+    def somme():
+        cnt=0
+        for r in range(rows):
+            if grid[center_col][r] == piece:
+                cnt+=1
+        return cnt
+    
+    center_count=somme()
+
+    #center_count = sum(1 for r in range(rows) if grid[center_col][r] == piece)
+    score += center_count * CENTER_WEIGHT # on multiplie par un facteur en plus (center weight) parce que le milieu est plus important
 
     for r in range(rows):
         for c in range(cols - 3):
-            window = [grid[c + i][r] for i in range(4)]
-            score += score_window(window, piece)
+            window = []
+            for i in range(4):
+                quad= grid[c+i][r]
+                window.append(quad)
+            window_score= score(window, piece)
+            score += window_score
+
+
 
     for c in range(cols):
         for r in range(rows - 3):
