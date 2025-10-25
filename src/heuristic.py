@@ -54,7 +54,7 @@ def heuristic(board, piece):
             for i in range(4):
                 quad= grid[c+i][r]
                 window.append(quad)
-            window_score= score(window, piece)
+            window_score= score_window(window, piece)
             score += window_score
 
 
