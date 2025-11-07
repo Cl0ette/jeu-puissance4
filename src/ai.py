@@ -1,7 +1,7 @@
 # src/ai.py
 import random
-from board import PLAYER, AI as AI_PIECE
-from heuristic import heuristic
+from src.board import PLAYER, AI as AI_PIECE
+from src.heuristic import heuristic
 
 # True pour voir les messages pendant la démo, False pour silence
 DETAILLE = True
