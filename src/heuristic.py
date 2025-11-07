@@ -1,7 +1,7 @@
 
 # src/heuristic.py
 from collections import Counter
-from src.board import EMPTY, PLAYER, AI
+from board import EMPTY, PLAYER, AI
 
 SCORE_FOUR = 1000
 SCORE_THREE = 10
