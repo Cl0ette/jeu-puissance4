@@ -14,15 +14,29 @@ class Board:
     def __init__(self, rows=ROWS, cols=COLS):
         self.rows = rows
         self.cols = cols
-        self.grid = [[EMPTY for _ in range(rows)] for _ in range(cols)] # creer le plateau vide
+        self.grid = [[EMPTY for i in range(rows)] for k in range(cols)] # creer le plateau vide
         self.heights = [0] * cols # permet de savoir le nb de pions empilés
         self.last_move = None  # connaitre le dernier coup joué
 
-    def is_valid(self, col): #permet de vérifier si le coup est possible
-        return 0 <= col < self.cols and self.heights[col] < self.rows # a réécrire pour plus claire
+    def is_valid(self, col):
+    
+    # Vérifier que la colonne ou l on veut jouer est compris entre 0 et le nombre total de colonnes - 1
+        if col < 0:
+            return False
+        if col >= self.cols:
+            return False
+        if self.heights[col] >= self.rows:
+            return False
+        return True
+    
 
-    def get_valid_moves(self): #renvooi les coups valide
-        return [c for c in range(self.cols) if self.is_valid(c)]
+    def get_valid_moves(self):# renvooi la liste des coups valides
+        moves = []
+        for c in range(self.cols):
+            if self.is_valid(c):
+                moves.append(c)
+        return moves
+
 
     def drop(self, col, piece):# ajoute un pion dans la colonne
         if not self.is_valid(col): #verifie que la colonne est accessible
@@ -33,7 +47,7 @@ class Board:
         self.last_move = (col, row, piece)
         return row
 
-    def undo(self, col):# supprime le dernier coup joué
+    def undo(self, col):# supprime le dernier coup joué (servira pour simulé les jets avec ia)
         if not (0 <= col < self.cols):
             raise ValueError("Colonne invalide")
         if self.heights[col] == 0:
@@ -43,11 +57,19 @@ class Board:
         self.grid[col][row] = EMPTY
         self.last_move = None
 
-    def is_full(self):# permet de dire quand le plateau est plein
-        return all(h == self.rows for h in self.heights)
+    def is_full(self):
+        for h in self.heights:
+            if h != self.rows:
+                return False
+        return True
 
-    def serialize(self):# ia / permet de figer le plateau
-        return tuple(tuple(col) for col in self.grid)
+
+    def serialize(self): # permet de figer le plateau pour que l'on ne puisse plus y toucher 
+        result = []
+        for col in self.grid:
+            result.append(tuple(col))
+        return tuple(result)
+
 
     def copy(self): #fait une copie du plateau
         b = Board(self.rows, self.cols)
@@ -56,7 +78,7 @@ class Board:
         b.last_move = tuple(self.last_move) if self.last_move is not None else None
         return b
 
-    def __str__(self):
+    def __str__(self): # permet de placer les signes sur le plateau de jeu 
         lines = []
         for r in range(self.rows - 1, -1, -1):
             line = []
