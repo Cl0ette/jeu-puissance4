@@ -1,5 +1,4 @@
-# src/ai.py
-# L'AI pour jouer au jeu, avec deux stratégies : aléatoire et heuristique.
+# L'IA pour jouer au jeu, avec deux stratégies : aléatoire et heuristique
 import random
 import logging
 from typing import Optional, Tuple
@@ -9,7 +8,7 @@ from src.heuristic import heuristic
 logger = logging.getLogger(__name__)
 
 def random_ai(board) -> Tuple[Optional[int], Optional[int]]:
-    """Retourne une colonne aléatoire valide et score None/0. Log des moves valides."""
+    """Retourne une colonne aléatoire valide et score 0. Log des moves valides."""
     moves = board.get_valid_moves()
     logger.debug("random_ai: valid moves = %s", moves)
     if not moves:
@@ -20,10 +19,7 @@ def random_ai(board) -> Tuple[Optional[int], Optional[int]]:
     return choice, 0
 
 def heuristic_ai(board, piece) -> Tuple[Optional[int], Optional[int]]:
-    """
-    Évalue chaque move en simulant drop puis undo(col).
-    Retourne (best_move, best_score) et logge chaque évaluation.
-    """
+    """Évalue chaque move en simulant drop puis undo(col)."""
     moves = board.get_valid_moves()
     logger.debug("heuristic_ai: valid moves = %s", moves)
     if not moves:
@@ -32,20 +28,10 @@ def heuristic_ai(board, piece) -> Tuple[Optional[int], Optional[int]]:
 
     best_score = None
     best_move = None
-    # Évaluer chaque coup
     for m in moves:
         board.drop(m, piece)
         s = heuristic(board, piece)
-        # undo en appelant undo(col) si l'API l'exige
-        try:
-            board.undo(m)
-        except TypeError:
-            # fallback si signature différente
-            if hasattr(board, "last_move") and board.last_move is not None:
-                col, _row = board.last_move
-                board.undo(col)
-            else:
-                raise
+        board.undo(m)
         logger.debug("heuristic_ai: move %s -> score %s", m, s)
         if best_score is None or s > best_score:
             best_score = s
@@ -53,4 +39,3 @@ def heuristic_ai(board, piece) -> Tuple[Optional[int], Optional[int]]:
 
     logger.info("heuristic_ai: chosen move = %s with score = %s", best_move, best_score)
     return best_move, best_score
-
