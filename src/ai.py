@@ -1,4 +1,5 @@
 # src/ai.py
+# L'AI pour jouer au jeu, avec deux stratégies : aléatoire et heuristique.
 import random
 import logging
 from typing import Optional, Tuple
