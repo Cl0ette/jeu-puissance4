@@ -4,7 +4,7 @@ from src.board import Board, EMPTY, PLAYER, AI
 
 def test_board_init():
     b = Board()
-    assert b.rows == 6 and b.cols == 7
+    assert b.lignes == 6 and b.cols == 7
     assert len(b.grid) == 7
     assert len(b.grid[0]) == 6
     assert all(cell == EMPTY for col in b.grid for cell in col)
@@ -29,7 +29,7 @@ def test_drop_and_undo():
         b.undo(0)
 
 def test_is_valid_and_get_valid_moves():
-    b = Board(rows=2, cols=3)
+    b = Board(lignes=2, cols=3)
     assert b.get_valid_moves() == [0, 1, 2]
     b.drop(0, PLAYER)
     b.drop(0, AI)
@@ -47,7 +47,7 @@ def test_serialize_and_copy():
     assert b.serialize() != c.serialize()
 
 def test_is_full():
-    b = Board(rows=2, cols=2)
+    b = Board(lignes=2, cols=2)
     assert not b.is_full()
     b.drop(0, PLAYER)
     b.drop(0, PLAYER)

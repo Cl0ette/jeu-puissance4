@@ -1,31 +1,37 @@
-# src/board.py
-ROWS = 6
+lignes = 6
 COLS = 7
 EMPTY = 0
 PLAYER = 1
 AI = 2
 
+# Codes ANSI pour les couleurs fait a partir d une vidéo yt et ia
+RESET = "\033[0m"
+ROUGE = "\033[91m"
+JAUNE = "\033[93m"
+BLEU = "\033[94m"
+
+
 class Board:
     """
     Représentation du plateau en colonnes empilées (list of columns).
-    Chaque colonne est une liste de hauteur `rows`, index 0 = bas.
+    Chaque colonne est une liste de hauteur `lignes`, index 0 = bas.
     """
 
-    def __init__(self, rows=ROWS, cols=COLS):
-        self.rows = rows
+    def __init__(self, lignes=lignes, cols=COLS):
+        self.lignes = lignes
         self.cols = cols
-        self.grid = [[EMPTY for _ in range(rows)] for _ in range(cols)] # creer le plateau vide
-        self.heights = [0] * cols # permet de savoir le nb de pions empilés
-        self.last_move = None  # connaitre le dernier coup joué
+        self.grid = [[EMPTY for _ in range(lignes)] for _ in range(cols)]  # plateau vide
+        self.heights = [0] * cols  # nb de pions empilés par colonne
+        self.last_move = None  # dernier coup joué
 
-    def is_valid(self, col): #permet de vérifier si le coup est possible
-        return 0 <= col < self.cols and self.heights[col] < self.rows # a réécrire pour plus claire
+    def is_valid(self, col):  # vérifie si le coup est possible
+        return 0 <= col < self.cols and self.heights[col] < self.lignes
 
-    def get_valid_moves(self): #renvooi les coups valide
+    def get_valid_moves(self):  # renvoie les coups valides
         return [c for c in range(self.cols) if self.is_valid(c)]
 
-    def drop(self, col, piece):# ajoute un pion dans la colonne
-        if not self.is_valid(col): #verifie que la colonne est accessible
+    def drop(self, col, piece):  # ajoute un pion dans la colonne
+        if not self.is_valid(col):
             raise ValueError("Colonne invalide ou pleine")
         row = self.heights[col]
         self.grid[col][row] = piece
@@ -33,7 +39,7 @@ class Board:
         self.last_move = (col, row, piece)
         return row
 
-    def undo(self, col):# supprime le dernier coup joué
+    def undo(self, col):  # supprime le dernier coup joué
         if not (0 <= col < self.cols):
             raise ValueError("Colonne invalide")
         if self.heights[col] == 0:
@@ -43,14 +49,14 @@ class Board:
         self.grid[col][row] = EMPTY
         self.last_move = None
 
-    def is_full(self):# permet de dire quand le plateau est plein
-        return all(h == self.rows for h in self.heights)
+    def is_full(self):  # plateau plein ?
+        return all(h == self.lignes for h in self.heights)
 
-    def serialize(self):# ia / permet de figer le plateau
+    def serialize(self):  # figer le plateau
         return tuple(tuple(col) for col in self.grid)
 
-    def copy(self): #fait une copie du plateau
-        b = Board(self.rows, self.cols)
+    def copy(self):  # copie du plateau
+        b = Board(self.lignes, self.cols)
         b.grid = [col.copy() for col in self.grid]
         b.heights = self.heights.copy()
         b.last_move = tuple(self.last_move) if self.last_move is not None else None
@@ -58,15 +64,15 @@ class Board:
 
     def __str__(self):
         lines = []
-        for r in range(self.rows - 1, -1, -1):
+        for r in range(self.lignes - 1, -1, -1):
             line = []
             for c in range(self.cols):
                 v = self.grid[c][r]
                 if v == EMPTY:
                     line.append('.')
                 elif v == PLAYER:
-                    line.append('X')
+                    line.append(ROUGE + 'X' + RESET)     # joueur en rouge
                 else:
-                    line.append('O')
+                    line.append(BLEU + 'O' + RESET)  # IA en jaune
             lines.append(' '.join(line))
         return '\n'.join(lines)

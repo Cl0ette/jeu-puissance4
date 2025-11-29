@@ -2,12 +2,33 @@ from src.board import Board, EMPTY, PLAYER, AI
 from src.rules import is_winning_move, is_draw
 from src import ai as ai_mod
 
-SYMBOLS = {EMPTY: '.', PLAYER: 'X', AI: 'O'}
+# Codes ANSI
+RESET = "\033[0m"
+RED = "\033[91m"
+BLUE = "\033[94m"
+YELLOW = "\033[93m"  # utilisé pour mettre en évidence le chemin gagnant
 
-def render(board: Board) -> str:
+SYMBOLS = {
+    EMPTY: '.',
+    PLAYER: RED + 'X' + RESET,
+    AI: BLUE + 'O' + RESET
+}
+
+def render(board: Board, winning_path=None) -> str:
+    """
+    Affiche le plateau. Si winning_path est fourni, les cases du chemin gagnant
+    sont affichées en doré.
+    """
+    winning = set(winning_path) if winning_path else set()
     lines = []
-    for r in range(board.rows - 1, -1, -1):
-        row = [SYMBOLS[board.grid[c][r]] for c in range(board.cols)]
+    for r in range(board.lignes - 1, -1, -1):
+        row = []
+        for c in range(board.cols):
+            v = board.grid[c][r]
+            if (c, r) in winning and v in (PLAYER, AI):
+                row.append(YELLOW + ('X' if v == PLAYER else 'O') + RESET)
+            else:
+                row.append(SYMBOLS[v])
         lines.append(' '.join(row))
     header = ' '.join(str(i) for i in range(board.cols))
     return header + '\n' + '\n'.join(lines)
@@ -36,8 +57,8 @@ def choose_mode() -> int:
             return int(choice)
         print("Enter 1 or 2.")
 
-def play_console(rows: int = 6, cols: int = 7):
-    board = Board(rows=rows, cols=cols)
+def play_console(lignes: int = 6, cols: int = 7):
+    board = Board(lignes=lignes, cols=cols)
     mode = choose_mode()
     current = PLAYER
 
@@ -54,8 +75,9 @@ def play_console(rows: int = 6, cols: int = 7):
             board.drop(col, PLAYER)
             print(f"Player X -> column {col}")
 
-            if is_winning_move(board):
-                print(render(board))
+            win, path = is_winning_move(board)
+            if win:
+                print(render(board, winning_path=path))
                 print("Player X wins!")
                 break
             current = AI
@@ -79,8 +101,9 @@ def play_console(rows: int = 6, cols: int = 7):
 
             board.drop(move, AI)
 
-            if is_winning_move(board):
-                print(render(board))
+            win, path = is_winning_move(board)
+            if win:
+                print(render(board, winning_path=path))
                 print("AI O wins!")
                 break
 

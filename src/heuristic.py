@@ -28,7 +28,7 @@ def score_window(window, piece): # systeme de récompense en fonction du nb de p
     return 0
 
 def heuristic(board, piece):
-    rows = board.rows
+    lignes = board.lignes
     cols = board.cols
     grid = board.grid
 
@@ -38,17 +38,17 @@ def heuristic(board, piece):
     
     def somme():
         cnt=0
-        for r in range(rows):
+        for r in range(lignes):
             if grid[center_col][r] == piece:
                 cnt+=1
         return cnt
     
     center_count=somme()
 
-    #center_count = sum(1 for r in range(rows) if grid[center_col][r] == piece)
+    #center_count = sum(1 for r in range(lignes) if grid[center_col][r] == piece)
     score += center_count * CENTER_WEIGHT # on multiplie par un facteur en plus (center weight) parce que le milieu est plus important
 
-    for r in range(rows): # fenetre horizontale
+    for r in range(lignes): # fenetre horizontale
         for c in range(cols - 3): # pour ne pas depasser i prend la valeur de 0 a 4 exclu pour récupérer 4 cases et le c va jusqu'a cols-3 pour que c+ i ne depasse jamais le nb de colonnes maximum 
             window = []
             for i in range(4):
@@ -59,7 +59,7 @@ def heuristic(board, piece):
 
 
     for c in range(cols):# fenetre verticale
-        for r in range(rows - 3):
+        for r in range(lignes - 3):
             for i in range(4):
                 window.append(grid[c][r + i])
            # window = [grid[c][r + i] for i in range(4)]
@@ -68,14 +68,14 @@ def heuristic(board, piece):
         # on prend les 4 cases les une sau dessus des autres consécutive dans la colonne c et l'on calcule le score cumulé de ses cases puis l'on refait la meme chose mais en le faisant glisser de 1 crant vers le haut
 
     for c in range(cols - 3): # fenetre diagonale montante de gauche a droite
-        for r in range(rows - 3):
+        for r in range(lignes - 3):
             for i in range(4): 
                 window.append(grid[c + i][r + i])
            # window = [grid[c + i][r + i] for i in range(4)]
             score += score_window(window, piece)
 
     for c in range(cols - 3):# fenetre diaginale descendente de gauche a droite
-        for r in range(3, rows): 
+        for r in range(3, lignes): 
             for i in range(4):
                 window.append(grid[c + i][r - i])
             #window = [grid[c + i][r - i] for i in range(4)]
