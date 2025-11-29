@@ -1,8 +1,8 @@
-# IA pour jouer au Puissance 4, avec deux stratégies : aléatoire et heuristique améliorée
+# src/ia.py
 import random
 from src.board import PLAYER, AI as AI_PIECE
-from src.heuristic import heuristic
 from src.rules import is_winning_move
+from src.heuristic import heuristic
 
 def random_ai(board):
     """
@@ -20,7 +20,7 @@ def heuristic_ai(board, piece):
     IA améliorée :
     1. Si elle peut gagner immédiatement, elle joue ce coup.
     2. Sinon, si l'adversaire peut gagner au prochain coup, elle bloque.
-    3. Sinon, elle choisit le coup avec le meilleur score heuristique.
+    3. Sinon, elle utilise la fonction heuristic basée sur les fenêtres.
     Retourne (colonne choisie, score).
     """
     moves = board.get_valid_moves()
@@ -44,15 +44,16 @@ def heuristic_ai(board, piece):
         if win:
             return m, 900  # gros score pour blocage
 
-    # 3. Sinon, heuristique normale
+    # 3. Sinon, heuristique avec fenêtres
     best_score = None
     best_move = None
     for m in moves:
         board.drop(m, piece)
-        s = heuristic(board, piece)
+        s = heuristic(board, piece)  # <-- ta fonction avec les fenêtres
         board.undo(m)
         if best_score is None or s > best_score:
             best_score = s
             best_move = m
 
     return best_move, best_score
+
