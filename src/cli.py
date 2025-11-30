@@ -57,7 +57,7 @@ def choose_mode() -> int:
             return int(choice)
         print("Enter 1 or 2.")
 
-def play_console(lignes: int = 6, cols: int = 7):
+def jouer_au_jeu(lignes: int = 6, cols: int = 7):
     board = Board(lignes=lignes, cols=cols)
     mode = choose_mode()
     current = PLAYER
@@ -115,4 +115,4 @@ def play_console(lignes: int = 6, cols: int = 7):
             break
 
 if __name__ == "__main__":
-    play_console()
+    jouer_au_jeu()
