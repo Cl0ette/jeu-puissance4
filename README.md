@@ -50,7 +50,7 @@ Description
 Un projet de Puissance4 en Python avec logique du plateau, règles de victoire optimisées, tests unitaires et une interface console ASCII. Conçu pour être simple à lire, tester et étendre.
 
 Statut actuel
-Board implémenté avec jouer_coup, annuler, est_valide, avoir_coup_valides, fige et utilitaires.
+Board implémenté avec jouer_coup, annuler, est_valide, sont_coup_valides, fige et utilitaires.
 
 rules.est_coup_gagnant optimisée pour ne vérifier que l’environnement du dernier coup.
 
@@ -84,7 +84,7 @@ Implementation d’un jeu Puissance4 en Python : plateau, règles, heuristique e
 
 Statut actuel
 
-Board : jouer_coup, annuler, est_valide, avoir_coup_valides, fige (tests unitaires présents).
+Board : jouer_coup, annuler, est_valide, sont_coup_valides, fige (tests unitaires présents).
 
 Rules : est_coup_gagnant optimisée autour du dernier coup, est_match_nul (tests présents).
 
@@ -151,7 +151,7 @@ Description
 - Implementation d’un jeu Puissance4 en Python : plateau, règles, heuristique et interface console ASCII.
 
 Statut actuel
-- Board : jouer_coup, annuler, est_valide, avoir_coup_valides, fige (tests unitaires présents).
+- Board : jouer_coup, annuler, est_valide, sont_coup_valides, fige (tests unitaires présents).
 - Rules : est_coup_gagnant optimisée autour du dernier coup, est_match_nul (tests présents).
 - CLI : src/cli.py — rendu ASCII et boucle de jeu console (saisie colonne, alternance, quit).
 - Heuristique : src/heuristic.py — fenêtres de 4, pondération du centre, scores pour 4/3/2 pièces.
@@ -198,7 +198,7 @@ Lancer la boucle console
 
 Notes d’implémentation
 - Heuristique : analyse toutes les fenêtres de longueur 4 (horizontales, verticales, diagonales), applique des scores pour 4/3/2 en faveur ou contre, et renforce la présence au centre pour favoriser positions centrales.
-- AI heuristique : simule chaque coup (jouer_coup), calcule heuristic(board, piece), puis annuler pour restaurer l’état; choisit le coup au score le plus élevé.
+- AI heuristique : simule chaque coup (jouer_coup), calcule heuristic(board, pion), puis annuler pour restaurer l’état; choisit le coup au score le plus élevé.
 - Règles : est_coup_gagnant vérifie autour du dernier coup pour efficience.
 - Stockage : grille par colonnes pour simplifier jouer_coup/annuler.
 

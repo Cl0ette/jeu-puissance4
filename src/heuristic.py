@@ -8,18 +8,18 @@ score_trois = 10
 score_deux = 1
 poids_centre = 3
 
-def score_window(window, piece): # systeme de récompense en fonction du nb de piece dans une zone
-    if piece == AI:
+def score_window(window, pion): # systeme de récompense en fonction du nb de pion dans une zone
+    if pion == AI:
         opp = PLAYER
     else:
         opp = AI
-    # opp = PLAYER if piece == AI else AI
+    # opp = PLAYER if pion == AI else AI
     cnt = Counter(window)
-    if cnt[piece] == 4:
+    if cnt[pion] == 4:
         return score_quatre
-    elif cnt[piece] == 3 and cnt[EMPTY] == 1:
+    elif cnt[pion] == 3 and cnt[EMPTY] == 1:
         return score_trois
-    elif cnt[piece] == 2 and cnt[EMPTY] == 2:
+    elif cnt[pion] == 2 and cnt[EMPTY] == 2:
         return score_deux
     elif cnt[opp] == 3 and cnt[EMPTY] == 1:
         return -score_trois
@@ -27,7 +27,7 @@ def score_window(window, piece): # systeme de récompense en fonction du nb de p
         return -score_quatre
     return 0
 
-def heuristic(board, piece):
+def heuristic(board, pion):
     lignes = board.lignes
     colones = board.colones
     grille = board.grille
@@ -39,13 +39,13 @@ def heuristic(board, piece):
     def somme():
         cnt=0
         for r in range(lignes):
-            if grille[colone_centre][r] == piece:
+            if grille[colone_centre][r] == pion:
                 cnt+=1
         return cnt
     
     nbpions_centre=somme()
 
-    #nbpions_centre = sum(1 for r in range(lignes) if grille[colone_centre][r] == piece)
+    #nbpions_centre = sum(1 for r in range(lignes) if grille[colone_centre][r] == pion)
     score += nbpions_centre * poids_centre # on multiplie par un facteur en plus (center weight) parce que le milieu est plus important
 
     for r in range(lignes): # fenetre horizontale
@@ -53,7 +53,7 @@ def heuristic(board, piece):
             window = []
             for i in range(4):
                 window.append(grille[c+i][r])
-            window_score= score_window(window, piece)
+            window_score= score_window(window, pion)
             score += window_score
 
 
@@ -63,7 +63,7 @@ def heuristic(board, piece):
             for i in range(4):
                 window.append(grille[c][r + i])
            # window = [grille[c][r + i] for i in range(4)]
-            score += score_window(window, piece)
+            score += score_window(window, pion)
 
         # on prend les 4 cases les une sau dessus des autres consécutive dans la colonne c et l'on calcule le score cumulé de ses cases puis l'on refait la meme chose mais en le faisant glisser de 1 crant vers le haut
 
@@ -72,14 +72,14 @@ def heuristic(board, piece):
             for i in range(4): 
                 window.append(grille[c + i][r + i])
            # window = [grille[c + i][r + i] for i in range(4)]
-            score += score_window(window, piece)
+            score += score_window(window, pion)
 
     for c in range(colones - 3):# fenetre diaginale descendente de gauche a droite
         for r in range(3, lignes): 
             for i in range(4):
                 window.append(grille[c + i][r - i])
             #window = [grille[c + i][r - i] for i in range(4)]
-            score += score_window(window, piece)
+            score += score_window(window, pion)
         # d'abord on prend une colone et on choisi un groupe de case en diagonale descendente vers la droite. Il faut donc commencer a partir de la ligne 3 pour que r+i soit toujours positif et ne sorte jamais du cadre. puis on monte mais sans decaler le groupe vers la droite, on fait glisser vers haut
     return score
 

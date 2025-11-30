@@ -4,14 +4,14 @@ from src import ai as ai_mod
 
 # Codes ANSI
 RESET = "\033[0m"
-RED = "\033[91m"
-BLUE = "\033[94m"
-YELLOW = "\033[93m"  # utilisé pour mettre en évidence le chemin gagnant
+ROUGE = "\033[91m"
+BLEU = "\033[94m"
+JAUNE = "\033[93m"  # utilisé pour mettre en évidence le chemin gagnant
 
 SYMBOLS = {
     EMPTY: '.',
-    PLAYER: RED + 'X' + RESET,
-    AI: BLUE + 'O' + RESET
+    PLAYER: ROUGE + 'X' + RESET,
+    AI: BLEU + 'O' + RESET
 }
 
 def render(board: Board, winning_path=None):
@@ -26,7 +26,7 @@ def render(board: Board, winning_path=None):
         for c in range(board.colones):
             v = board.grille[c][r]
             if (c, r) in winning and v in (PLAYER, AI):
-                ligne.append(YELLOW + ('X' if v == PLAYER else 'O') + RESET)
+                ligne.append(JAUNE + ('X' if v == PLAYER else 'O') + RESET)
             else:
                 ligne.append(SYMBOLS[v])
         lignes.append(' '.join(ligne))
@@ -36,30 +36,30 @@ def render(board: Board, winning_path=None):
 def demander_colonne(board: Board):
     while True:
         try:
-            raw = input(f"Choose column (0-{board.colones-1}) or 'q' to quit: ").strip()
+            raw = input(f"choisir une colone (0-{board.colones-1}) ou 'q' pour quitter: ").strip()
             if raw.lower() in ('q', 'quit', 'exit'):
                 return None
             colone = int(raw)
             if not board.est_valide(colone):
-                print("Invalid column. Choose another one.")
+                print("Colone invalide. Veuillez en choisir une autre.")
                 continue
             return colone
         except ValueError:
-            print("Please enter a number.")
+            print("Veuillez choisir un nombre s'il vous-plait .")
 
-def choose_mode() -> int:
-    print("Select mode:")
-    print("1) Human vs Random AI")
-    print("2) Human vs Heuristic AI")
+def choisir_mode():
+    print("Choisisez un mode:")
+    print("1) Joueur vs ia aléatoire")
+    print("2) Jouer vs ia heuristique")
     while True:
-        choice = input("Choose 1 or 2 (default 1): ").strip() or "1"
+        choice = input("choisisez 1 ou 2 (defaut 1): ").strip() or "1"
         if choice in ("1", "2"):
             return int(choice)
-        print("Enter 1 or 2.")
+        print("Entrer 1 or 2.")
 
 def jouer_au_jeu(lignes: int = 6, colones: int = 7):
     board = Board(lignes=lignes, colones=colones)
-    mode = choose_mode()
+    mode = choisir_mode()
     current = PLAYER
 
     print(f"\nStarting Puissance4 (console). Mode: {'Random AI' if mode == 1 else 'Heuristic AI'}")
@@ -70,33 +70,33 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
         if current == PLAYER:
             colone = demander_colonne(board)
             if colone is None:
-                print("Player exited the game.")
+                print("le joueur a quitter la partie.")
                 break
             board.jouer_coup(colone, PLAYER)
-            print(f"Player X -> column {colone}")
+            print(f"joueur X -> colone {colone}")
 
             win, path = est_coup_gagnant(board)
             if win:
                 print(render(board, winning_path=path))
-                print("Player X wins!")
+                print("le joueur X a gagné!")
                 break
             current = AI
 
         else:
-            valid = board.avoir_coup_valides()
+            valid = board.sont_coup_valides()
             if not valid:
-                print("No moves left.")
+                print("il n'y a plus de coup possible.")
                 break
 
             if mode == 1:
                 move, score = ai_mod.ia_aleatoire(board)
-                print(f"AI chosen (random) -> colone {move}")
+                print(f"l'ia a choisi -> colone {move}")
             else:
                 move, score = ai_mod.ia_heuristique(board, AI)
-                print(f"AI chosen (heuristic) -> colone {move} with score {score}")
+                print(f"l'ia a choisi -> colone {move} avec le score {score}")
 
             if move is None:
-                print("AI cannot move.")
+                print("l'ia ne peut plus bouger.")
                 break
 
             board.jouer_coup(move, AI)
@@ -104,14 +104,14 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
             win, path = est_coup_gagnant(board)
             if win:
                 print(render(board, winning_path=path))
-                print("AI O wins!")
+                print("l'ia O a gagnée!")
                 break
 
             current = PLAYER
 
         if est_match_nul(board):
             print(render(board))
-            print("Draw!")
+            print("Match null!")
             break
 
 if __name__ == "__main__":

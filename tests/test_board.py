@@ -9,7 +9,7 @@ def test_board_init():
     assert len(b.grille[0]) == 6
     assert all(cell == EMPTY for colone in b.grille for cell in colone)
     assert b.hauteurs == [0] * 7
-    assert b.last_move is None
+    assert b.dernier_coup is None
 
 def test_drop_and_undo():
     b = Board()
@@ -30,12 +30,12 @@ def test_drop_and_undo():
 
 def test_is_valid_and_get_valid_moves():
     b = Board(lignes=2, colones=3)
-    assert b.avoir_coup_valides() == [0, 1, 2]
+    assert b.sont_coup_valides() == [0, 1, 2]
     b.jouer_coup(0, PLAYER)
     b.jouer_coup(0, AI)
     assert not b.est_valide(0)
-    assert 0 not in b.avoir_coup_valides()
-    assert set(b.avoir_coup_valides()) == {1, 2}
+    assert 0 not in b.sont_coup_valides()
+    assert set(b.sont_coup_valides()) == {1, 2}
 
 def test_serialize_and_copy():
     b = Board()
