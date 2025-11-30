@@ -52,9 +52,9 @@ Un projet de Puissance4 en Python avec logique du plateau, règles de victoire o
 Statut actuel
 Board implémenté avec drop, undo, is_valid, get_valid_moves, serialize et utilitaires.
 
-rules.is_winning_move optimisée pour ne vérifier que l’environnement du dernier coup.
+rules.est_coup_gagnant optimisée pour ne vérifier que l’environnement du dernier coup.
 
-Détection de match nul via is_draw.
+Détection de match nul via est_match_nul.
 
 Tests unitaires pour Board et Rules.
 
@@ -86,7 +86,7 @@ Statut actuel
 
 Board : drop, undo, is_valid, get_valid_moves, serialize (tests unitaires présents).
 
-Rules : is_winning_move optimisée autour du dernier coup, is_draw (tests présents).
+Rules : est_coup_gagnant optimisée autour du dernier coup, est_match_nul (tests présents).
 
 CLI : src/cli.py — rendu ASCII et boucle de jeu console (saisie colonne, alternance, quit).
 
@@ -140,7 +140,7 @@ Notes d’implémentation
 
 Heuristique : analyse toutes les fenêtres de longueur 4 (horizontales, verticales, diagonales), applique des scores pour 4/3/2 en faveur ou contre, et renforce la présence au centre pour favoriser positions centrales.
 
-Détection victoire : is_winning_move ne vérifie que l’entourage du dernier coup, complexité constante par coup.
+Détection victoire : est_coup_gagnant ne vérifie que l’entourage du dernier coup, complexité constante par coup.
 
 Stockage : grille par colonnes pour simplifier drop/undo.
 
@@ -152,7 +152,7 @@ Description
 
 Statut actuel
 - Board : drop, undo, is_valid, get_valid_moves, serialize (tests unitaires présents).
-- Rules : is_winning_move optimisée autour du dernier coup, is_draw (tests présents).
+- Rules : est_coup_gagnant optimisée autour du dernier coup, est_match_nul (tests présents).
 - CLI : src/cli.py — rendu ASCII et boucle de jeu console (saisie colonne, alternance, quit).
 - Heuristique : src/heuristic.py — fenêtres de 4, pondération du centre, scores pour 4/3/2 pièces.
 - AI : src/ai.py — IA aléatoire et IA heuristique (évalue chaque coup puis undo).
@@ -199,7 +199,7 @@ Lancer la boucle console
 Notes d’implémentation
 - Heuristique : analyse toutes les fenêtres de longueur 4 (horizontales, verticales, diagonales), applique des scores pour 4/3/2 en faveur ou contre, et renforce la présence au centre pour favoriser positions centrales.
 - AI heuristique : simule chaque coup (drop), calcule heuristic(board, piece), puis undo pour restaurer l’état; choisit le coup au score le plus élevé.
-- Règles : is_winning_move vérifie autour du dernier coup pour efficience.
+- Règles : est_coup_gagnant vérifie autour du dernier coup pour efficience.
 - Stockage : grille par colonnes pour simplifier drop/undo.
 
 Prochaines évolutions recommandées

@@ -19,7 +19,7 @@ def _scan_from(board, col, row, piece):
             return True, path
     return False, []
 
-def is_winning_move(board):
+def est_coup_gagnant(board):
     """
     Vérifie si le dernier coup est gagnant.
     Retourne (True, chemin) si victoire, sinon (False, []).
@@ -31,7 +31,7 @@ def is_winning_move(board):
             return True, path
     return False, []
 
-def is_draw(board):
+def est_match_nul(board):
     """
     Vérifie si le plateau est plein (match nul).
     """

@@ -1,5 +1,5 @@
 from src.board import Board, EMPTY, PLAYER, AI
-from src.rules import is_winning_move, is_draw
+from src.rules import est_coup_gagnant, est_match_nul
 from src import ai as ai_mod
 
 # Codes ANSI
@@ -75,7 +75,7 @@ def play_console(lignes: int = 6, cols: int = 7):
             board.drop(col, PLAYER)
             print(f"Player X -> column {col}")
 
-            win, path = is_winning_move(board)
+            win, path = est_coup_gagnant(board)
             if win:
                 print(render(board, winning_path=path))
                 print("Player X wins!")
@@ -101,7 +101,7 @@ def play_console(lignes: int = 6, cols: int = 7):
 
             board.drop(move, AI)
 
-            win, path = is_winning_move(board)
+            win, path = est_coup_gagnant(board)
             if win:
                 print(render(board, winning_path=path))
                 print("AI O wins!")
@@ -109,7 +109,7 @@ def play_console(lignes: int = 6, cols: int = 7):
 
             current = PLAYER
 
-        if is_draw(board):
+        if est_match_nul(board):
             print(render(board))
             print("Draw!")
             break

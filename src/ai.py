@@ -1,7 +1,7 @@
 # src/ia.py
 import random
 from src.board import PLAYER, AI as AI_PIECE
-from src.rules import is_winning_move
+from src.rules import est_coup_gagnant
 from src.heuristic import heuristic
 
 def ia_aleatoire(board):
@@ -30,7 +30,7 @@ def ia_heuristique(board, piece):
     # 1. Coup gagnant immédiat
     for m in moves:
         board.drop(m, piece)
-        win, _ = is_winning_move(board)
+        win, _ = est_coup_gagnant(board)
         board.undo(m)
         if win:
             return m, 1000  # gros score pour victoire immédiate
@@ -39,21 +39,21 @@ def ia_heuristique(board, piece):
     opponent = PLAYER if piece == AI_PIECE else AI_PIECE
     for m in moves:
         board.drop(m, opponent)
-        win, _ = is_winning_move(board)
+        win, _ = est_coup_gagnant(board)
         board.undo(m)
         if win:
             return m, 900  # gros score pour blocage
 
     # 3. Sinon, heuristique avec fenêtres
-    best_score = None
+    meilleur_score = None
     best_move = None
     for m in moves:
         board.drop(m, piece)
         s = heuristic(board, piece)  # <-- ta fonction avec les fenêtres
         board.undo(m)
-        if best_score is None or s > best_score:
-            best_score = s
+        if meilleur_score is None or s > meilleur_score:
+            meilleur_score = s
             best_move = m
 
-    return best_move, best_score
+    return best_move, meilleur_score
 
