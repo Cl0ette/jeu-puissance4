@@ -20,7 +20,7 @@ class Board:
     def __init__(self, lignes=lignes, colones=colones):
         self.lignes = lignes
         self.colones = colones
-        self.grid = [[EMPTY for _ in range(lignes)] for _ in range(colones)]  # plateau vide
+        self.grille = [[EMPTY for _ in range(lignes)] for _ in range(colones)]  # plateau vide
         self.hauteurs = [0] * colones  # nb de pions empilés par colonne
         self.last_move = None  # dernier coup joué
 
@@ -33,31 +33,31 @@ class Board:
     def jouer_coup(self, colone, piece):  # ajoute un pion dans la colonne
         if not self.est_valide(colone):
             raise ValueError("Colonne invalide ou pleine")
-        row = self.hauteurs[colone]
-        self.grid[colone][row] = piece
+        ligne = self.hauteurs[colone]
+        self.grille[colone][ligne] = piece
         self.hauteurs[colone] += 1
-        self.last_move = (colone, row, piece)
-        return row
+        self.last_move = (colone, ligne, piece)
+        return ligne
 
-    def annuler(self, colone):  # supprime le dernier coup joué  ia
+    def annuler(self, colone):  # supprime le dernier coup joué  
         if not (0 <= colone < self.colones):
             raise ValueError("Colonne invalide")
         if self.hauteurs[colone] == 0:
             raise ValueError("Rien à annuler dans cette colonne")
         self.hauteurs[colone] -= 1
-        row = self.hauteurs[colone]
-        self.grid[colone][row] = EMPTY
+        ligne = self.hauteurs[colone]
+        self.grille[colone][ligne] = EMPTY
         self.last_move = None
 
     def est_plein(self):  # plateau plein ?
         return all(h == self.lignes for h in self.hauteurs)
 
     def fige(self):  # figer le plateau  idée ia
-        return tuple(tuple(colone) for colone in self.grid)
+        return tuple(tuple(colone) for colone in self.grille)
 
     def copie(self):  # copie du plateau
         b = Board(self.lignes, self.colones)
-        b.grid = [colone.copie() for colone in self.grid]
+        b.grille = [colone.copie() for colone in self.grille]
         b.hauteurs = self.hauteurs.copie()
         b.last_move = tuple(self.last_move) if self.last_move is not None else None
         return b
@@ -67,7 +67,7 @@ class Board:
         for r in range(self.lignes - 1, -1, -1):
             line = []
             for c in range(self.colones):
-                v = self.grid[c][r]
+                v = self.grille[c][r]
                 if v == EMPTY:
                     line.append('.')
                 elif v == PLAYER:

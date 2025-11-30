@@ -5,26 +5,26 @@ from src.board import Board, EMPTY, PLAYER, AI
 def test_board_init():
     b = Board()
     assert b.lignes == 6 and b.colones == 7
-    assert len(b.grid) == 7
-    assert len(b.grid[0]) == 6
-    assert all(cell == EMPTY for colone in b.grid for cell in colone)
+    assert len(b.grille) == 7
+    assert len(b.grille[0]) == 6
+    assert all(cell == EMPTY for colone in b.grille for cell in colone)
     assert b.hauteurs == [0] * 7
     assert b.last_move is None
 
 def test_drop_and_undo():
     b = Board()
-    row = b.jouer_coup(0, PLAYER)
-    assert row == 0
-    assert b.grid[0][0] == PLAYER
+    ligne = b.jouer_coup(0, PLAYER)
+    assert ligne == 0
+    assert b.grille[0][0] == PLAYER
     assert b.hauteurs[0] == 1
     b.jouer_coup(0, AI)
     assert b.hauteurs[0] == 2
     b.annuler(0)
     assert b.hauteurs[0] == 1
-    assert b.grid[0][1] == EMPTY
+    assert b.grille[0][1] == EMPTY
     b.annuler(0)
     assert b.hauteurs[0] == 0
-    assert b.grid[0][0] == EMPTY
+    assert b.grille[0][0] == EMPTY
     with pytest.raises(ValueError):
         b.annuler(0)
 

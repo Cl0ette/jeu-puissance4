@@ -22,14 +22,14 @@ def render(board: Board, winning_path=None):
     winning = set(winning_path) if winning_path else set()
     lignes = []
     for r in range(board.lignes - 1, -1, -1):
-        row = []
+        ligne = []
         for c in range(board.colones):
-            v = board.grid[c][r]
+            v = board.grille[c][r]
             if (c, r) in winning and v in (PLAYER, AI):
-                row.append(YELLOW + ('X' if v == PLAYER else 'O') + RESET)
+                ligne.append(YELLOW + ('X' if v == PLAYER else 'O') + RESET)
             else:
-                row.append(SYMBOLS[v])
-        lignes.append(' '.join(row))
+                ligne.append(SYMBOLS[v])
+        lignes.append(' '.join(ligne))
     header = ' '.join(str(i) for i in range(board.colones))
     return header + '\n' + '\n'.join(lignes)
 
