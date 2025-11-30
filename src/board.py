@@ -1,5 +1,5 @@
 lignes = 6
-COLS = 7
+colones = 7
 EMPTY = 0
 PLAYER = 1
 AI = 2
@@ -17,48 +17,48 @@ class Board:
     Chaque colonne est une liste de hauteur `lignes`, index 0 = bas.
     """
 
-    def __init__(self, lignes=lignes, cols=COLS):
+    def __init__(self, lignes=lignes, colones=colones):
         self.lignes = lignes
-        self.cols = cols
-        self.grid = [[EMPTY for _ in range(lignes)] for _ in range(cols)]  # plateau vide
-        self.hauteurs = [0] * cols  # nb de pions empilés par colonne
+        self.colones = colones
+        self.grid = [[EMPTY for _ in range(lignes)] for _ in range(colones)]  # plateau vide
+        self.hauteurs = [0] * colones  # nb de pions empilés par colonne
         self.last_move = None  # dernier coup joué
 
-    def is_valid(self, col):  # vérifie si le coup est possible
-        return 0 <= col < self.cols and self.hauteurs[col] < self.lignes
+    def est_valide(self, colone):  # vérifie si le coup est possible
+        return 0 <= colone < self.colones and self.hauteurs[colone] < self.lignes
 
-    def get_valid_moves(self):  # renvoie les coups valides
-        return [c for c in range(self.cols) if self.is_valid(c)]
+    def avoir_coup_valides(self):  # renvoie les coups valides
+        return [c for c in range(self.colones) if self.est_valide(c)]
 
-    def drop(self, col, piece):  # ajoute un pion dans la colonne
-        if not self.is_valid(col):
+    def jouer_coup(self, colone, piece):  # ajoute un pion dans la colonne
+        if not self.est_valide(colone):
             raise ValueError("Colonne invalide ou pleine")
-        row = self.hauteurs[col]
-        self.grid[col][row] = piece
-        self.hauteurs[col] += 1
-        self.last_move = (col, row, piece)
+        row = self.hauteurs[colone]
+        self.grid[colone][row] = piece
+        self.hauteurs[colone] += 1
+        self.last_move = (colone, row, piece)
         return row
 
-    def undo(self, col):  # supprime le dernier coup joué
-        if not (0 <= col < self.cols):
+    def annuler(self, colone):  # supprime le dernier coup joué  ia
+        if not (0 <= colone < self.colones):
             raise ValueError("Colonne invalide")
-        if self.hauteurs[col] == 0:
+        if self.hauteurs[colone] == 0:
             raise ValueError("Rien à annuler dans cette colonne")
-        self.hauteurs[col] -= 1
-        row = self.hauteurs[col]
-        self.grid[col][row] = EMPTY
+        self.hauteurs[colone] -= 1
+        row = self.hauteurs[colone]
+        self.grid[colone][row] = EMPTY
         self.last_move = None
 
-    def is_full(self):  # plateau plein ?
+    def est_plein(self):  # plateau plein ?
         return all(h == self.lignes for h in self.hauteurs)
 
-    def serialize(self):  # figer le plateau
-        return tuple(tuple(col) for col in self.grid)
+    def fige(self):  # figer le plateau  idée ia
+        return tuple(tuple(colone) for colone in self.grid)
 
-    def copy(self):  # copie du plateau
-        b = Board(self.lignes, self.cols)
-        b.grid = [col.copy() for col in self.grid]
-        b.hauteurs = self.hauteurs.copy()
+    def copie(self):  # copie du plateau
+        b = Board(self.lignes, self.colones)
+        b.grid = [colone.copie() for colone in self.grid]
+        b.hauteurs = self.hauteurs.copie()
         b.last_move = tuple(self.last_move) if self.last_move is not None else None
         return b
 
@@ -66,7 +66,7 @@ class Board:
         lignes = []
         for r in range(self.lignes - 1, -1, -1):
             line = []
-            for c in range(self.cols):
+            for c in range(self.colones):
                 v = self.grid[c][r]
                 if v == EMPTY:
                     line.append('.')

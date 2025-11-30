@@ -23,27 +23,27 @@ def render(board: Board, winning_path=None):
     lignes = []
     for r in range(board.lignes - 1, -1, -1):
         row = []
-        for c in range(board.cols):
+        for c in range(board.colones):
             v = board.grid[c][r]
             if (c, r) in winning and v in (PLAYER, AI):
                 row.append(YELLOW + ('X' if v == PLAYER else 'O') + RESET)
             else:
                 row.append(SYMBOLS[v])
         lignes.append(' '.join(row))
-    header = ' '.join(str(i) for i in range(board.cols))
+    header = ' '.join(str(i) for i in range(board.colones))
     return header + '\n' + '\n'.join(lignes)
 
-def ask_column(board: Board):
+def demander_colonne(board: Board):
     while True:
         try:
-            raw = input(f"Choose column (0-{board.cols-1}) or 'q' to quit: ").strip()
+            raw = input(f"Choose column (0-{board.colones-1}) or 'q' to quit: ").strip()
             if raw.lower() in ('q', 'quit', 'exit'):
                 return None
-            col = int(raw)
-            if not board.is_valid(col):
+            colone = int(raw)
+            if not board.est_valide(colone):
                 print("Invalid column. Choose another one.")
                 continue
-            return col
+            return colone
         except ValueError:
             print("Please enter a number.")
 
@@ -57,8 +57,8 @@ def choose_mode() -> int:
             return int(choice)
         print("Enter 1 or 2.")
 
-def jouer_au_jeu(lignes: int = 6, cols: int = 7):
-    board = Board(lignes=lignes, cols=cols)
+def jouer_au_jeu(lignes: int = 6, colones: int = 7):
+    board = Board(lignes=lignes, colones=colones)
     mode = choose_mode()
     current = PLAYER
 
@@ -68,12 +68,12 @@ def jouer_au_jeu(lignes: int = 6, cols: int = 7):
         print(render(board))
 
         if current == PLAYER:
-            col = ask_column(board)
-            if col is None:
+            colone = demander_colonne(board)
+            if colone is None:
                 print("Player exited the game.")
                 break
-            board.drop(col, PLAYER)
-            print(f"Player X -> column {col}")
+            board.jouer_coup(colone, PLAYER)
+            print(f"Player X -> column {colone}")
 
             win, path = est_coup_gagnant(board)
             if win:
@@ -83,23 +83,23 @@ def jouer_au_jeu(lignes: int = 6, cols: int = 7):
             current = AI
 
         else:
-            valid = board.get_valid_moves()
+            valid = board.avoir_coup_valides()
             if not valid:
                 print("No moves left.")
                 break
 
             if mode == 1:
                 move, score = ai_mod.ia_aleatoire(board)
-                print(f"AI chosen (random) -> col {move}")
+                print(f"AI chosen (random) -> colone {move}")
             else:
                 move, score = ai_mod.ia_heuristique(board, AI)
-                print(f"AI chosen (heuristic) -> col {move} with score {score}")
+                print(f"AI chosen (heuristic) -> colone {move} with score {score}")
 
             if move is None:
                 print("AI cannot move.")
                 break
 
-            board.drop(move, AI)
+            board.jouer_coup(move, AI)
 
             win, path = est_coup_gagnant(board)
             if win:

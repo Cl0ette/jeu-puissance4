@@ -9,7 +9,7 @@ def ia_aleatoire(board):
     Choisit une colonne valide au hasard.
     Retourne (colonne choisie, score=0).
     """
-    moves = board.get_valid_moves()
+    moves = board.avoir_coup_valides()
     if not moves:
         return None, None
     choice = random.choice(moves)
@@ -23,24 +23,24 @@ def ia_heuristique(board, piece):
     3. Sinon, elle utilise la fonction heuristic basée sur les fenêtres.
     Retourne (colonne choisie, score).
     """
-    moves = board.get_valid_moves()
+    moves = board.avoir_coup_valides()
     if not moves:
         return None, None
 
     # 1. Coup gagnant immédiat
     for m in moves:
-        board.drop(m, piece)
+        board.jouer_coup(m, piece)
         win, _ = est_coup_gagnant(board)
-        board.undo(m)
+        board.annuler(m)
         if win:
             return m, 1000  # gros score pour victoire immédiate
 
     # 2. Bloquer l’adversaire
     opponent = PLAYER if piece == AI_PIECE else AI_PIECE
     for m in moves:
-        board.drop(m, opponent)
+        board.jouer_coup(m, opponent)
         win, _ = est_coup_gagnant(board)
-        board.undo(m)
+        board.annuler(m)
         if win:
             return m, 900  # gros score pour blocage
 
@@ -48,9 +48,9 @@ def ia_heuristique(board, piece):
     meilleur_score = None
     best_move = None
     for m in moves:
-        board.drop(m, piece)
+        board.jouer_coup(m, piece)
         s = heuristic(board, piece)  # <-- ta fonction avec les fenêtres
-        board.undo(m)
+        board.annuler(m)
         if meilleur_score is None or s > meilleur_score:
             meilleur_score = s
             best_move = m
