@@ -21,11 +21,11 @@ class Board:
         self.lignes = lignes
         self.cols = cols
         self.grid = [[EMPTY for _ in range(lignes)] for _ in range(cols)]  # plateau vide
-        self.heights = [0] * cols  # nb de pions empilés par colonne
+        self.hauteurs = [0] * cols  # nb de pions empilés par colonne
         self.last_move = None  # dernier coup joué
 
     def is_valid(self, col):  # vérifie si le coup est possible
-        return 0 <= col < self.cols and self.heights[col] < self.lignes
+        return 0 <= col < self.cols and self.hauteurs[col] < self.lignes
 
     def get_valid_moves(self):  # renvoie les coups valides
         return [c for c in range(self.cols) if self.is_valid(c)]
@@ -33,24 +33,24 @@ class Board:
     def drop(self, col, piece):  # ajoute un pion dans la colonne
         if not self.is_valid(col):
             raise ValueError("Colonne invalide ou pleine")
-        row = self.heights[col]
+        row = self.hauteurs[col]
         self.grid[col][row] = piece
-        self.heights[col] += 1
+        self.hauteurs[col] += 1
         self.last_move = (col, row, piece)
         return row
 
     def undo(self, col):  # supprime le dernier coup joué
         if not (0 <= col < self.cols):
             raise ValueError("Colonne invalide")
-        if self.heights[col] == 0:
+        if self.hauteurs[col] == 0:
             raise ValueError("Rien à annuler dans cette colonne")
-        self.heights[col] -= 1
-        row = self.heights[col]
+        self.hauteurs[col] -= 1
+        row = self.hauteurs[col]
         self.grid[col][row] = EMPTY
         self.last_move = None
 
     def is_full(self):  # plateau plein ?
-        return all(h == self.lignes for h in self.heights)
+        return all(h == self.lignes for h in self.hauteurs)
 
     def serialize(self):  # figer le plateau
         return tuple(tuple(col) for col in self.grid)
@@ -58,12 +58,12 @@ class Board:
     def copy(self):  # copie du plateau
         b = Board(self.lignes, self.cols)
         b.grid = [col.copy() for col in self.grid]
-        b.heights = self.heights.copy()
+        b.hauteurs = self.hauteurs.copy()
         b.last_move = tuple(self.last_move) if self.last_move is not None else None
         return b
 
     def __str__(self):
-        lines = []
+        lignes = []
         for r in range(self.lignes - 1, -1, -1):
             line = []
             for c in range(self.cols):
@@ -74,5 +74,5 @@ class Board:
                     line.append(ROUGE + 'X' + RESET)     # joueur en rouge
                 else:
                     line.append(BLEU + 'O' + RESET)  # IA en jaune
-            lines.append(' '.join(line))
-        return '\n'.join(lines)
+            lignes.append(' '.join(line))
+        return '\n'.join(lignes)

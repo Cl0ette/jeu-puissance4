@@ -4,7 +4,7 @@ from src.board import PLAYER, AI as AI_PIECE
 from src.rules import is_winning_move
 from src.heuristic import heuristic
 
-def random_ai(board):
+def ia_aleatoire(board):
     """
     Choisit une colonne valide au hasard.
     Retourne (colonne choisie, score=0).
@@ -15,7 +15,7 @@ def random_ai(board):
     choice = random.choice(moves)
     return choice, 0
 
-def heuristic_ai(board, piece):
+def ia_heuristique(board, piece):
     """
     IA améliorée :
     1. Si elle peut gagner immédiatement, elle joue ce coup.

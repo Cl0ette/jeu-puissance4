@@ -14,13 +14,13 @@ SYMBOLS = {
     AI: BLUE + 'O' + RESET
 }
 
-def render(board: Board, winning_path=None) -> str:
+def render(board: Board, winning_path=None):
     """
     Affiche le plateau. Si winning_path est fourni, les cases du chemin gagnant
     sont affichées en doré.
     """
     winning = set(winning_path) if winning_path else set()
-    lines = []
+    lignes = []
     for r in range(board.lignes - 1, -1, -1):
         row = []
         for c in range(board.cols):
@@ -29,9 +29,9 @@ def render(board: Board, winning_path=None) -> str:
                 row.append(YELLOW + ('X' if v == PLAYER else 'O') + RESET)
             else:
                 row.append(SYMBOLS[v])
-        lines.append(' '.join(row))
+        lignes.append(' '.join(row))
     header = ' '.join(str(i) for i in range(board.cols))
-    return header + '\n' + '\n'.join(lines)
+    return header + '\n' + '\n'.join(lignes)
 
 def ask_column(board: Board):
     while True:
@@ -89,10 +89,10 @@ def play_console(lignes: int = 6, cols: int = 7):
                 break
 
             if mode == 1:
-                move, score = ai_mod.random_ai(board)
+                move, score = ai_mod.ia_aleatoire(board)
                 print(f"AI chosen (random) -> col {move}")
             else:
-                move, score = ai_mod.heuristic_ai(board, AI)
+                move, score = ai_mod.ia_heuristique(board, AI)
                 print(f"AI chosen (heuristic) -> col {move} with score {score}")
 
             if move is None:

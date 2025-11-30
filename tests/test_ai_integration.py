@@ -1,13 +1,13 @@
 # tests/test_ai_integration.py
 from src.board import Board, PLAYER, AI
-from src.ai import random_ai, heuristic_ai
+from src.ai import ia_aleatoire, ia_heuristique
 
 def test_random_ai_returns_valid_move():
     b = Board()
-    move, score = random_ai(b)
+    move, score = ia_aleatoire(b)
     assert move in b.get_valid_moves() or move is None
 
 def test_heuristic_ai_returns_valid_move_and_score():
     b = Board()
-    move, score = heuristic_ai(b, AI)
+    move, score = ia_heuristique(b, AI)
     assert move in b.get_valid_moves() or move is None

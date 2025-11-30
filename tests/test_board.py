@@ -8,7 +8,7 @@ def test_board_init():
     assert len(b.grid) == 7
     assert len(b.grid[0]) == 6
     assert all(cell == EMPTY for col in b.grid for cell in col)
-    assert b.heights == [0] * 7
+    assert b.hauteurs == [0] * 7
     assert b.last_move is None
 
 def test_drop_and_undo():
@@ -16,14 +16,14 @@ def test_drop_and_undo():
     row = b.drop(0, PLAYER)
     assert row == 0
     assert b.grid[0][0] == PLAYER
-    assert b.heights[0] == 1
+    assert b.hauteurs[0] == 1
     b.drop(0, AI)
-    assert b.heights[0] == 2
+    assert b.hauteurs[0] == 2
     b.undo(0)
-    assert b.heights[0] == 1
+    assert b.hauteurs[0] == 1
     assert b.grid[0][1] == EMPTY
     b.undo(0)
-    assert b.heights[0] == 0
+    assert b.hauteurs[0] == 0
     assert b.grid[0][0] == EMPTY
     with pytest.raises(ValueError):
         b.undo(0)
