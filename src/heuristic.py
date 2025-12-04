@@ -5,7 +5,7 @@ from src.board import EMPTY, PLAYER, AI
 score_quatre = 1000
 score_trois = 10
 score_deux = 1
-poids_centre = 3
+poids_centre = 2
 
 def score_window(window, pion):  # système de récompense en fonction du nb de pion dans une zone
     if pion == AI:

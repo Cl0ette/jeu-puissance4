@@ -78,9 +78,9 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
             board.jouer_coup(colone, PLAYER)
             print(f"joueur X -> colone {colone}")
 
-            win, path = est_coup_gagnant(board)
+            win, chemin = est_coup_gagnant(board)
             if win:
-                print(render(board, winning_path=path))
+                print(render(board, winning_path=chemin))
                 print("le joueur X a gagné!")
                 break
             current = AI
@@ -107,9 +107,9 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
 
             board.jouer_coup(move, AI)
 
-            win, path = est_coup_gagnant(board)
+            win, chemin = est_coup_gagnant(board)
             if win:
-                print(render(board, winning_path=path))
+                print(render(board, winning_path=chemin))
                 print("l'ia O a gagnée!")
                 break
 
