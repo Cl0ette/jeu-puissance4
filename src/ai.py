@@ -57,3 +57,41 @@ def ia_heuristique(board, pion):
 
     return meilleur_coup, meilleur_score
 
+def minimax(board, depth, maximizingPlayer, pion):
+    # condition d’arrêt : victoire, match nul ou profondeur atteinte
+    win, _ = est_coup_gagnant(board)
+    if win or depth == 0 or board.est_plein():
+        return heuristic(board, pion)
+
+    moves = board.sont_coup_valides()
+
+    if maximizingPlayer:
+        maxEval = float("-inf")
+        for m in moves:
+            board.jouer_coup(m, pion)
+            eval = minimax(board, depth-1, False, pion)
+            board.annuler(m)
+            maxEval = max(maxEval, eval)
+        return maxEval
+    else:
+        opponent = PLAYER if pion == AI_PIECE else AI_PIECE
+        minEval = float("inf")
+        for m in moves:
+            board.jouer_coup(m, opponent)
+            eval = minimax(board, depth-1, True, pion)
+            board.annuler(m)
+            minEval = min(minEval, eval)
+        return minEval
+
+def ia_minimax(board, pion, depth=12):
+    moves = board.sont_coup_valides()
+    meilleur_score = float("-inf")
+    meilleur_coup = None
+    for m in moves:
+        board.jouer_coup(m, pion)
+        score = minimax(board, depth-1, False, pion)
+        board.annuler(m)
+        if score > meilleur_score:
+            meilleur_score = score
+            meilleur_coup = m
+    return meilleur_coup, meilleur_score

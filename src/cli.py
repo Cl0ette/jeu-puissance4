@@ -1,3 +1,4 @@
+# src/cli.py
 from src.board import Board, EMPTY, PLAYER, AI
 from src.rules import est_coup_gagnant, est_match_nul
 from src import ai as ai_mod
@@ -45,24 +46,26 @@ def demander_colonne(board: Board):
                 continue
             return colone
         except ValueError:
-            print("Veuillez choisir un nombre s'il vous-plait .")
+            print("Veuillez choisir un nombre s'il vous-plait.")
 
 def choisir_mode():
     print("Choisisez un mode:")
     print("1) Joueur vs ia aléatoire")
-    print("2) Jouer vs ia heuristique")
+    print("2) Joueur vs ia heuristique")
+    print("3) Joueur vs ia minimax")
     while True:
-        choice = input("choisisez 1 ou 2 (defaut 1): ").strip() or "1"
-        if choice in ("1", "2"):
+        choice = input("choisisez 1, 2 ou 3 (defaut 1): ").strip() or "1"
+        if choice in ("1", "2", "3"):
             return int(choice)
-        print("Entrer 1 or 2.")
+        print("Entrer 1, 2 ou 3.")
 
 def jouer_au_jeu(lignes: int = 6, colones: int = 7):
     board = Board(lignes=lignes, colones=colones)
     mode = choisir_mode()
     current = PLAYER
 
-    print(f"\nStarting Puissance4 (console). Mode: {'Random AI' if mode == 1 else 'Heuristic AI'}")
+    print(f"\nStarting Puissance4 (console). Mode: "
+          f"{'Random AI' if mode == 1 else 'Heuristic AI' if mode == 2 else 'Minimax AI'}")
 
     while True:
         print(render(board))
@@ -91,8 +94,11 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
             if mode == 1:
                 move, score = ai_mod.ia_aleatoire(board)
                 print(f"l'ia a choisi -> colone {move}")
-            else:
+            elif mode == 2:
                 move, score = ai_mod.ia_heuristique(board, AI)
+                print(f"l'ia a choisi -> colone {move} avec le score {score}")
+            else:
+                move, score = ai_mod.ia_minimax(board, AI, depth=3)
                 print(f"l'ia a choisi -> colone {move} avec le score {score}")
 
             if move is None:

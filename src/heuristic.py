@@ -1,4 +1,3 @@
-
 # src/heuristic.py
 from collections import Counter
 from src.board import EMPTY, PLAYER, AI
@@ -8,12 +7,11 @@ score_trois = 10
 score_deux = 1
 poids_centre = 3
 
-def score_window(window, pion): # systeme de récompense en fonction du nb de pion dans une zone
+def score_window(window, pion):  # système de récompense en fonction du nb de pion dans une zone
     if pion == AI:
-        opp = PLAYER
+        adv = PLAYER
     else:
-        opp = AI
-    # opp = PLAYER if pion == AI else AI
+        adv = AI
     cnt = Counter(window)
     if cnt[pion] == 4:
         return score_quatre
@@ -21,9 +19,9 @@ def score_window(window, pion): # systeme de récompense en fonction du nb de pi
         return score_trois
     elif cnt[pion] == 2 and cnt[EMPTY] == 2:
         return score_deux
-    elif cnt[opp] == 3 and cnt[EMPTY] == 1:
+    elif cnt[adv] == 3 and cnt[EMPTY] == 1:
         return -score_trois
-    elif cnt[opp] == 4:
+    elif cnt[adv] == 4:
         return -score_quatre
     return 0
 
@@ -37,49 +35,45 @@ def heuristic(board, pion):
     colone_centre = colones // 2
     
     def somme():
-        cnt=0
+        cnt = 0
         for r in range(lignes):
             if grille[colone_centre][r] == pion:
-                cnt+=1
+                cnt += 1
         return cnt
     
-    nbpions_centre=somme()
+    nbpions_centre = somme()
+    score += nbpions_centre * poids_centre  # bonus pour les pions au centre
 
-    #nbpions_centre = sum(1 for r in range(lignes) if grille[colone_centre][r] == pion)
-    score += nbpions_centre * poids_centre # on multiplie par un facteur en plus (center weight) parce que le milieu est plus important
-
-    for r in range(lignes): # fenetre horizontale
-        for c in range(colones - 3): # pour ne pas depasser i prend la valeur de 0 a 4 exclu pour récupérer 4 cases et le c va jusqu'a colones-3 pour que c+ i ne depasse jamais le nb de colonnes maximum 
+    # Fenêtres horizontales
+    for r in range(lignes):
+        for c in range(colones - 3):
             window = []
             for i in range(4):
                 window.append(grille[c+i][r])
-            window_score= score_window(window, pion)
-            score += window_score
+            score += score_window(window, pion)
 
-
-
-    for c in range(colones):# fenetre verticale
+    # Fenêtres verticales
+    for c in range(colones):
         for r in range(lignes - 3):
+            window = []
             for i in range(4):
-                window.append(grille[c][r + i])
-           # window = [grille[c][r + i] for i in range(4)]
+                window.append(grille[c][r+i])
             score += score_window(window, pion)
 
-        # on prend les 4 cases les une sau dessus des autres consécutive dans la colonne c et l'on calcule le score cumulé de ses cases puis l'on refait la meme chose mais en le faisant glisser de 1 crant vers le haut
-
-    for c in range(colones - 3): # fenetre diagonale montante de gauche a droite
+    # Fenêtres diagonales montantes
+    for c in range(colones - 3):
         for r in range(lignes - 3):
-            for i in range(4): 
-                window.append(grille[c + i][r + i])
-           # window = [grille[c + i][r + i] for i in range(4)]
+            window = []
+            for i in range(4):
+                window.append(grille[c+i][r+i])
             score += score_window(window, pion)
 
-    for c in range(colones - 3):# fenetre diaginale descendente de gauche a droite
-        for r in range(3, lignes): 
+    # Fenêtres diagonales descendantes
+    for c in range(colones - 3):
+        for r in range(3, lignes):
+            window = []
             for i in range(4):
-                window.append(grille[c + i][r - i])
-            #window = [grille[c + i][r - i] for i in range(4)]
+                window.append(grille[c+i][r-i])
             score += score_window(window, pion)
-        # d'abord on prend une colone et on choisi un groupe de case en diagonale descendente vers la droite. Il faut donc commencer a partir de la ligne 3 pour que r+i soit toujours positif et ne sorte jamais du cadre. puis on monte mais sans decaler le groupe vers la droite, on fait glisser vers haut
+
     return score
-
