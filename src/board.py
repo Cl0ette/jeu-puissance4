@@ -1,5 +1,5 @@
-lignes = 6
-colones = 7
+lignes = 12
+colones = 12
 EMPTY = 0
 PLAYER = 1
 AI = 2
@@ -52,7 +52,7 @@ class Board:
     def est_plein(self):  # plateau plein ?
         return all(h == self.lignes for h in self.hauteurs)
 
-    def fige(self):  # figer le plateau  idée ia
+    def fige(self):  # figer le plateau  
         return tuple(tuple(colone) for colone in self.grille)
 
     def copie(self):  # copie du plateau

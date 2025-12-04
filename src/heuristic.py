@@ -34,7 +34,7 @@ def heuristic(board, pion):
 
     colone_centre = colones // 2
     
-    def somme():
+    def somme(): #juste pour augmenter le poids au centre
         cnt = 0
         for r in range(lignes):
             if grille[colone_centre][r] == pion:

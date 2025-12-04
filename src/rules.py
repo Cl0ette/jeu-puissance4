@@ -1,7 +1,7 @@
 # src/rules.py
 from src.board import EMPTY, PLAYER, AI
 
-def _scan_from(board, colone, ligne, pion):
+def scan(board, colone, ligne, pion):
     directions = [(1,0), (0,1), (1,1), (1,-1)]  # horizontal, vertical, diagonales
     for dc, dr in directions:
         chemin = [(colone, ligne)]
@@ -26,7 +26,7 @@ def est_coup_gagnant(board):
     """
     if board.dernier_coup is not None:
         colone, ligne, pion = board.dernier_coup
-        win, chemin = _scan_from(board, colone, ligne, pion)
+        win, chemin = scan(board, colone, ligne, pion)
         if win:
             return True, chemin
     return False, []

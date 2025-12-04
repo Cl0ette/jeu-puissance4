@@ -9,26 +9,26 @@ def ia_aleatoire(board):
     Choisit une colonne valide au hasard.
     Retourne (colonne choisie, score=0).
     """
-    moves = board.sont_coup_valides()
-    if not moves:
+    coups = board.sont_coup_valides()
+    if not coups:
         return None, None
-    choice = random.choice(moves)
+    choice = random.choice(coups)
     return choice, 0
 
 def ia_heuristique(board, pion):
     """
-    IA améliorée :
-    1. Si elle peut gagner immédiatement, elle joue ce coup.
-    2. Sinon, si l'adversaire peut gagner au prochain coup, elle bloque.
-    3. Sinon, elle utilise la fonction heuristic basée sur les fenêtres.
+    IA qui utilise notre heuristique :
+    1. Si elle peut gagner immédiatement, elle joue le coup gagnant.
+    2. Si l'adversaire peut gagner elle le bloque.
+    3. Et sinon elle utilise la fonction heuristic qui "note" le plateau.
     Retourne (colonne choisie, score).
     """
-    moves = board.sont_coup_valides()
-    if not moves:
+    coups = board.sont_coup_valides()
+    if not coups:
         return None, None
 
     # 1. Coup gagnant immédiat
-    for m in moves:
+    for m in coups:
         board.jouer_coup(m, pion)
         win, _ = est_coup_gagnant(board)
         board.annuler(m)
@@ -37,7 +37,7 @@ def ia_heuristique(board, pion):
 
     # 2. Bloquer l’adversaire
     opponent = PLAYER if pion == AI_PIECE else AI_PIECE
-    for m in moves:
+    for m in coups:
         board.jouer_coup(m, opponent)
         win, _ = est_coup_gagnant(board)
         board.annuler(m)
@@ -47,7 +47,7 @@ def ia_heuristique(board, pion):
     # 3. Sinon, heuristique avec fenêtres
     meilleur_score = None
     meilleur_coup = None
-    for m in moves:
+    for m in coups:
         board.jouer_coup(m, pion)
         s = heuristic(board, pion)  # <-- ta fonction avec les fenêtres
         board.annuler(m)
@@ -63,11 +63,11 @@ def minimax(board, depth, maximizingPlayer, pion):
     if win or depth == 0 or board.est_plein():
         return heuristic(board, pion)
 
-    moves = board.sont_coup_valides()
+    coups = board.sont_coup_valides()
 
     if maximizingPlayer:
         maxEval = float("-inf")
-        for m in moves:
+        for m in coups:
             board.jouer_coup(m, pion)
             eval = minimax(board, depth-1, False, pion)
             board.annuler(m)
@@ -76,7 +76,7 @@ def minimax(board, depth, maximizingPlayer, pion):
     else:
         opponent = PLAYER if pion == AI_PIECE else AI_PIECE
         minEval = float("inf")
-        for m in moves:
+        for m in coups:
             board.jouer_coup(m, opponent)
             eval = minimax(board, depth-1, True, pion)
             board.annuler(m)
@@ -84,10 +84,10 @@ def minimax(board, depth, maximizingPlayer, pion):
         return minEval
 
 def ia_minimax(board, pion, depth=12):
-    moves = board.sont_coup_valides()
+    coups = board.sont_coup_valides()
     meilleur_score = float("-inf")
     meilleur_coup = None
-    for m in moves:
+    for m in coups:
         board.jouer_coup(m, pion)
         score = minimax(board, depth-1, False, pion)
         board.annuler(m)
