@@ -26,6 +26,9 @@ cd <votre-repo>
 python -m src.cli
 
 *J'ouvre mon dossier depuis vscode*
+
 *Je vais dans __init__.py*
+
 *Je colle dans la console*
+
 *PS C:\Users\cloeh\Documents\Etude\Majeur info\Projet\jeu-puissance4> python -m src.cli*
