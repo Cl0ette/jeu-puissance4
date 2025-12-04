@@ -6,7 +6,7 @@ Aligner **4 pions consécutifs** de sa couleur et de son symbole (horizontalemen
 ---
 
 ## Plateau
-- Grille de 7 colonnes × 6 lignes (configurable).
+- Grille de 7 colonnes × 6 lignes.
 - Les pions tombent dans la case libre la plus basse de la colonne choisie.
 
 ---
@@ -27,7 +27,6 @@ Aligner **4 pions consécutifs** de sa couleur et de son symbole (horizontalemen
 ---
 
 ## Variantes
-- Taille de la grille modifiable.
 - Choix de l’IA (`random`, `heuristic`, `minimax`).
 - Profondeur de recherche ajustable pour minimax.
 
