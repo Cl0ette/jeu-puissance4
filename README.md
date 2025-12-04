@@ -13,7 +13,6 @@ Ce projet implémente le jeu **Puissance 4** en Python, avec plusieurs niveaux d
 ## Dépendances
 - RIEN 
 - Bibliothèque standard Python (`random`)
-- Optionnel : `pytest` pour les tests
 
 ---
 
