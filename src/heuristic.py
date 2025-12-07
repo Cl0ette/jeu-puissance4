@@ -1,6 +1,7 @@
 # src/heuristic.py
 from collections import Counter
 from src.board import EMPTY, PLAYER, AI
+from src.rules import est_coup_gagnant
 
 score_quatre = 1000
 score_trois = 10
@@ -26,6 +27,9 @@ def score_window(window, pion):  # système de récompense en fonction du nb de 
     return 0
 
 def heuristic(board, pion):
+    """
+    fonction qui permet de noter chacunes 
+    """
     lignes = board.lignes
     colones = board.colones
     grille = board.grille
@@ -36,8 +40,8 @@ def heuristic(board, pion):
     
     def somme(): #juste pour augmenter le poids au centre
         cnt = 0
-        for r in range(lignes):
-            if grille[colone_centre][r] == pion:
+        for l in range(lignes):
+            if grille[colone_centre][l] == pion:
                 cnt += 1
         return cnt
     
@@ -45,35 +49,36 @@ def heuristic(board, pion):
     score += nbpions_centre * poids_centre  # bonus pour les pions au centre
 
     # Fenêtres horizontales
-    for r in range(lignes):
+    for l in range(lignes):
         for c in range(colones - 3):
             window = []
             for i in range(4):
-                window.append(grille[c+i][r])
+                window.append(grille[c+i][l])
             score += score_window(window, pion)
 
     # Fenêtres verticales
     for c in range(colones):
-        for r in range(lignes - 3):
+        for l in range(lignes - 3):
             window = []
             for i in range(4):
-                window.append(grille[c][r+i])
+                window.append(grille[c][l+i])
             score += score_window(window, pion)
 
     # Fenêtres diagonales montantes
     for c in range(colones - 3):
-        for r in range(lignes - 3):
+        for l in range(lignes - 3):
             window = []
             for i in range(4):
-                window.append(grille[c+i][r+i])
+                window.append(grille[c+i][l+i])
             score += score_window(window, pion)
 
     # Fenêtres diagonales descendantes
     for c in range(colones - 3):
-        for r in range(3, lignes):
+        for l in range(3, lignes):
             window = []
             for i in range(4):
-                window.append(grille[c+i][r-i])
+                window.append(grille[c+i][l-i])
             score += score_window(window, pion)
 
     return score
+

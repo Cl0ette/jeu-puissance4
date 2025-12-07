@@ -2,19 +2,22 @@
 from src.board import EMPTY, PLAYER, AI
 
 def scan(board, colone, ligne, pion):
+    """
+    permet de retracer les chemins (utile juste pour coup gagnant)
+    """
     directions = [(1,0), (0,1), (1,1), (1,-1)]  # horizontal, vertical, diagonales
-    for dc, dr in directions:
+    for dc, dl in directions:
         chemin = [(colone, ligne)]
-        # vers l'avant
-        c, r = colone + dc, ligne + dr
-        while 0 <= c < board.colones and 0 <= r < board.lignes and board.grille[c][r] == pion:
-            chemin.append((c, r))
-            c += dc; r += dr
-        # vers l'arrière
-        c, r = colone - dc, ligne - dr
-        while 0 <= c < board.colones and 0 <= r < board.lignes and board.grille[c][r] == pion:
-            chemin.insert(0, (c, r))
-            c -= dc; r -= dr
+        # vers l'"avant"
+        c, l = colone + dc, ligne + dl
+        while 0 <= c < board.colones and 0 <= l < board.lignes and board.grille[c][l] == pion:
+            chemin.append((c, l))
+            c += dc; l += dl
+        # vers l'"arrière"
+        c, l = colone - dc, ligne - dl
+        while 0 <= c < board.colones and 0 <= l < board.lignes and board.grille[c][l] == pion:
+            chemin.insert(0, (c, l))
+            c -= dc; l -= dl
         if len(chemin) >= 4:
             return True, chemin
     return False, []

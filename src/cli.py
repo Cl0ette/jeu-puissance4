@@ -1,7 +1,7 @@
 # src/cli.py
 from src.board import Board, EMPTY, PLAYER, AI
 from src.rules import est_coup_gagnant, est_match_nul
-from src import ai as ai_mod
+from src import ai as ai
 
 # Codes ANSI
 RESET = "\033[0m"
@@ -15,18 +15,18 @@ SYMBOLS = {
     AI: BLEU + 'O' + RESET
 }
 
-def render(board: Board, winning_path=None):
+def render(board: Board, chemin_gagant=None):
     """
-    Affiche le plateau. Si winning_path est fourni, les cases du chemin gagnant
+    Affiche le plateau. Si chemin_gagant est fourni, les cases du chemin gagnant
     sont affichées en doré.
     """
-    winning = set(winning_path) if winning_path else set()
+    gagnant = set(chemin_gagant) if chemin_gagant else set()
     lignes = []
-    for r in range(board.lignes - 1, -1, -1):
+    for l in range(board.lignes - 1, -1, -1):
         ligne = []
         for c in range(board.colones):
-            v = board.grille[c][r]
-            if (c, r) in winning and v in (PLAYER, AI):
+            v = board.grille[c][l]
+            if (c, l) in gagnant and v in (PLAYER, AI):
                 ligne.append(JAUNE + ('X' if v == PLAYER else 'O') + RESET)
             else:
                 ligne.append(SYMBOLS[v])
@@ -63,10 +63,6 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
     board = Board(lignes=lignes, colones=colones)
     mode = choisir_mode()
     current = PLAYER
-
-    print(f"\nStarting Puissance4 (console). Mode: "
-          f"{'Random AI' if mode == 1 else 'Heuristic AI' if mode == 2 else 'Minimax AI'}")
-
     while True:
         print(render(board))
 
@@ -80,7 +76,7 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
 
             win, chemin = est_coup_gagnant(board)
             if win:
-                print(render(board, winning_path=chemin))
+                print(render(board, chemin_gagant=chemin))
                 print("le joueur X a gagné!")
                 break
             current = AI
@@ -92,13 +88,13 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
                 break
 
             if mode == 1:
-                move, score = ai_mod.ia_aleatoire(board)
+                move, score = ai.ia_aleatoire(board)
                 print(f"l'ia a choisi -> colone {move}")
             elif mode == 2:
-                move, score = ai_mod.ia_heuristique(board, AI)
+                move, score = ai.ia_heuristique(board, AI)
                 print(f"l'ia a choisi -> colone {move} avec le score {score}")
             else:
-                move, score = ai_mod.ia_minimax(board, AI, depth=3)
+                move, score = ai.ia_minimax(board, AI)
                 print(f"l'ia a choisi -> colone {move} avec le score {score}")
 
             if move is None:
@@ -109,7 +105,7 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
 
             win, chemin = est_coup_gagnant(board)
             if win:
-                print(render(board, winning_path=chemin))
+                print(render(board, chemin_gagant=chemin))
                 print("l'ia O a gagnée!")
                 break
 

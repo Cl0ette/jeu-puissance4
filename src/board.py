@@ -1,5 +1,5 @@
-lignes = 12
-colones = 12
+lignes = 6   #pour modifier le nb de lignes ou de colones, il faut les modifié a la main dans l appel de la fonction jouer_au_jeu derniere ligne de src.cli
+colones = 7
 EMPTY = 0
 PLAYER = 1
 AI = 2
@@ -64,10 +64,10 @@ class Board:
 
     def __str__(self):
         lignes = []
-        for r in range(self.lignes - 1, -1, -1):
+        for l in range(self.lignes - 1, -1, -1):
             line = []
             for c in range(self.colones):
-                v = self.grille[c][r]
+                v = self.grille[c][l]
                 if v == EMPTY:
                     line.append('.')
                 elif v == PLAYER:

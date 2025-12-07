@@ -83,7 +83,7 @@ def minimax(board, depth, maximizingPlayer, pion):
             minEval = min(minEval, eval)
         return minEval
 
-def ia_minimax(board, pion, depth=12):
+def ia_minimax(board, pion, depth=5):
     coups = board.sont_coup_valides()
     meilleur_score = float("-inf")
     meilleur_coup = None
