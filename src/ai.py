@@ -57,21 +57,21 @@ def ia_heuristique(board, pion):
 
     return meilleur_coup, meilleur_score
 
-def minimax(board, depth, maximizingPlayer, pion):
+def minimax(board, depth, maximizingPlayer, pion): # développé à partir du modèle proposé par Datacamp (plateforme d’apprentissage en ligne)
     # condition d’arrêt : victoire, match nul ou profondeur atteinte
-    win, _ = est_coup_gagnant(board)
-    if win or depth == 0 or board.est_plein():
-        return heuristic(board, pion)
+    win, _ = est_coup_gagnant(board) 
+    if win or depth == 0 or board.est_plein():# puits dans le graphe
+        return heuristic(board, pion) # poids heuristique appliqué aux puits
 
-    coups = board.sont_coup_valides()
+    coups = board.sont_coup_valides() # arcs sortant du noeud courant
 
     if maximizingPlayer:
-        maxEval = float("-inf")
-        for m in coups:
-            board.jouer_coup(m, pion)
-            eval = minimax(board, depth-1, False, pion)
-            board.annuler(m)
-            maxEval = max(maxEval, eval)
+        maxEval = float("-inf") #poids de l'arc du graphe
+        for m in coups: # cherche poids maximum parmi arcs sortants
+            board.jouer_coup(m, pion) # parcourt chaque arc sortant du nœud courant
+            eval = minimax(board, depth-1, False, pion) # explore récursivement 
+            board.annuler(m) # revient au nœud courant (comme si remontait dans graphe)
+            maxEval = max(maxEval, eval) # sélection du poids maximum
         return maxEval
     else:
         opponent = PLAYER if pion == AI_PIECE else AI_PIECE
@@ -81,7 +81,7 @@ def minimax(board, depth, maximizingPlayer, pion):
             eval = minimax(board, depth-1, True, pion)
             board.annuler(m)
             minEval = min(minEval, eval)
-        return minEval
+        return minEval # retourne poids minimum
 
 def ia_minimax(board, pion, depth=5):
     coups = board.sont_coup_valides()

@@ -52,16 +52,6 @@ class Board:
     def est_plein(self):  # plateau plein ?
         return all(h == self.lignes for h in self.hauteurs)
 
-    def fige(self):  # figer le plateau  
-        return tuple(tuple(colone) for colone in self.grille)
-
-    def copie(self):  # copie du plateau
-        b = Board(self.lignes, self.colones)
-        b.grille = [colone.copie() for colone in self.grille]
-        b.hauteurs = self.hauteurs.copie()
-        b.dernier_coup = tuple(self.dernier_coup) if self.dernier_coup is not None else None
-        return b
-
     def __str__(self):
         lignes = []
         for l in range(self.lignes - 1, -1, -1):
