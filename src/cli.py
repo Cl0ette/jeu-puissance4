@@ -9,13 +9,13 @@ ROUGE = "\033[91m"
 BLEU = "\033[94m"
 JAUNE = "\033[93m"  # utilisé pour mettre en évidence le chemin gagnant
 
-SYMBOLS = {
+SYMBOLES = {
     EMPTY: '.',
     PLAYER: ROUGE + 'X' + RESET,
     AI: BLEU + 'O' + RESET
 }
 
-def render(board: Board, chemin_gagant=None):
+def afficher_plateau(board: Board, chemin_gagant=None):
     """
     Affiche le plateau. Si chemin_gagant est fourni, les cases du chemin gagnant
     sont affichées en doré.
@@ -29,7 +29,7 @@ def render(board: Board, chemin_gagant=None):
             if (c, l) in gagnant and v in (PLAYER, AI):
                 ligne.append(JAUNE + ('X' if v == PLAYER else 'O') + RESET)
             else:
-                ligne.append(SYMBOLS[v])
+                ligne.append(SYMBOLES[v])
         lignes.append(' '.join(ligne))
     header = ' '.join(str(i) for i in range(board.colones))
     return header + '\n' + '\n'.join(lignes)
@@ -64,7 +64,7 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
     mode = choisir_mode()
     current = PLAYER
     while True:
-        print(render(board))
+        print(afficher_plateau(board))
 
         if current == PLAYER:
             colone = demander_colonne(board)
@@ -76,7 +76,7 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
 
             win, chemin = est_coup_gagnant(board)
             if win:
-                print(render(board, chemin_gagant=chemin))
+                print(afficher_plateau(board, chemin_gagant=chemin))
                 print("le joueur X a gagné!")
                 break
             current = AI
@@ -105,14 +105,14 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
 
             win, chemin = est_coup_gagnant(board)
             if win:
-                print(render(board, chemin_gagant=chemin))
+                print(afficher_plateau(board, chemin_gagant=chemin))
                 print("l'ia O a gagnée!")
                 break
 
             current = PLAYER
 
         if est_match_nul(board):
-            print(render(board))
+            print(afficher_plateau(board))
             print("Match null!")
             break
 
