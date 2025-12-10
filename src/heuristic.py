@@ -31,12 +31,12 @@ def heuristic(board, pion):
     fonction qui permet de noter chacunes 
     """
     lignes = board.lignes
-    colones = board.colones
+    colonnes = board.colonnes
     grille = board.grille
 
     score = 0
 
-    colone_centre = colones // 2
+    colone_centre = colonnes // 2
     
     def somme(): #juste pour augmenter le poids au centre
         cnt = 0
@@ -50,14 +50,14 @@ def heuristic(board, pion):
 
     # Fenêtres horizontales
     for l in range(lignes):
-        for c in range(colones - 3):
+        for c in range(colonnes - 3):
             window = []
             for i in range(4):
                 window.append(grille[c+i][l])
             score += score_window(window, pion)
 
     # Fenêtres verticales
-    for c in range(colones):
+    for c in range(colonnes):
         for l in range(lignes - 3):
             window = []
             for i in range(4):
@@ -65,7 +65,7 @@ def heuristic(board, pion):
             score += score_window(window, pion)
 
     # Fenêtres diagonales montantes
-    for c in range(colones - 3):
+    for c in range(colonnes - 3):
         for l in range(lignes - 3):
             window = []
             for i in range(4):
@@ -73,7 +73,7 @@ def heuristic(board, pion):
             score += score_window(window, pion)
 
     # Fenêtres diagonales descendantes
-    for c in range(colones - 3):
+    for c in range(colonnes - 3):
         for l in range(3, lignes):
             window = []
             for i in range(4):

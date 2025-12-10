@@ -1,21 +1,21 @@
 # src/rules.py
 from src.board import EMPTY, PLAYER, AI
 
-def scan(board, colone, ligne, pion):
+def scan(board, colonne, ligne, pion):
     """
     permet de retracer les chemins (utile juste pour coup gagnant)
     """
     directions = [(1,0), (0,1), (1,1), (1,-1)]  # horizontal, vertical, diagonales
     for dc, dl in directions:
-        chemin = [(colone, ligne)]
+        chemin = [(colonne, ligne)]
         # vers l'"avant"
-        c, l = colone + dc, ligne + dl
-        while 0 <= c < board.colones and 0 <= l < board.lignes and board.grille[c][l] == pion:
+        c, l = colonne + dc, ligne + dl
+        while 0 <= c < board.colonnes and 0 <= l < board.lignes and board.grille[c][l] == pion:
             chemin.append((c, l))
             c += dc; l += dl
         # vers l'"arrière"
-        c, l = colone - dc, ligne - dl
-        while 0 <= c < board.colones and 0 <= l < board.lignes and board.grille[c][l] == pion:
+        c, l = colonne - dc, ligne - dl
+        while 0 <= c < board.colonnes and 0 <= l < board.lignes and board.grille[c][l] == pion:
             chemin.insert(0, (c, l))
             c -= dc; l -= dl
         if len(chemin) >= 4:
@@ -28,8 +28,8 @@ def est_coup_gagnant(board):
     Retourne (True, chemin) si victoire, sinon (False, []).
     """
     if board.dernier_coup is not None:
-        colone, ligne, pion = board.dernier_coup
-        win, chemin = scan(board, colone, ligne, pion)
+        colonne, ligne, pion = board.dernier_coup
+        win, chemin = scan(board, colonne, ligne, pion)
         if win:
             return True, chemin
     return False, []

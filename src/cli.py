@@ -15,36 +15,36 @@ SYMBOLES = {
     AI: BLEU + 'O' + RESET
 }
 
-def afficher_plateau(board: Board, chemin_gagant=None):
+def afficher_plateau(board: Board, chemin_gagnant=None):
     """
-    Affiche le plateau. Si chemin_gagant est fourni, les cases du chemin gagnant
+    Affiche le plateau. Si chemin_gagnant est fourni, les cases du chemin gagnant
     sont affichées en doré.
     """
-    gagnant = set(chemin_gagant) if chemin_gagant else set()
+    gagnant = set(chemin_gagnant) if chemin_gagnant else set()
     lignes = []
     for l in range(board.lignes - 1, -1, -1):
         ligne = []
-        for c in range(board.colones):
+        for c in range(board.colonnes):
             v = board.grille[c][l]
             if (c, l) in gagnant and v in (PLAYER, AI):
                 ligne.append(JAUNE + ('X' if v == PLAYER else 'O') + RESET)
             else:
                 ligne.append(SYMBOLES[v])
         lignes.append(' '.join(ligne))
-    header = ' '.join(str(i) for i in range(board.colones))
-    return header + '\n' + '\n'.join(lignes)
+    en_tete = ' '.join(str(i) for i in range(board.colonnes))
+    return en_tete + '\n' + '\n'.join(lignes)
 
 def demander_colonne(board: Board):
     while True:
         try:
-            raw = input(f"choisir une colone (0-{board.colones-1}) ou 'q' pour quitter: ").strip()
+            raw = input(f"choisir une colonne (0-{board.colonnes-1}) ou 'q' pour quitter: ").strip()
             if raw.lower() in ('q', 'quit', 'exit'):
                 return None
-            colone = int(raw)
-            if not board.est_valide(colone):
-                print("Colone invalide. Veuillez en choisir une autre.")
+            colonne = int(raw)
+            if not board.est_valide(colonne):
+                print("colonne invalide. Veuillez en choisir une autre.")
                 continue
-            return colone
+            return colonne
         except ValueError:
             print("Veuillez choisir un nombre s'il vous-plait.")
 
@@ -59,24 +59,24 @@ def choisir_mode():
             return int(choice)
         print("Entrer 1, 2 ou 3.")
 
-def jouer_au_jeu(lignes: int = 6, colones: int = 7):
-    board = Board(lignes=lignes, colones=colones)
+def jouer_au_jeu(lignes: int = 6, colonnes: int = 7):
+    board = Board(lignes=lignes, colonnes=colonnes)
     mode = choisir_mode()
     current = PLAYER
     while True:
         print(afficher_plateau(board))
 
         if current == PLAYER:
-            colone = demander_colonne(board)
-            if colone is None:
+            colonne = demander_colonne(board)
+            if colonne is None:
                 print("le joueur a quitter la partie.")
                 break
-            board.jouer_coup(colone, PLAYER)
-            print(f"joueur X -> colone {colone}")
+            board.jouer_coup(colonne, PLAYER)
+            print(f"joueur X -> colonne {colonne}")
 
             win, chemin = est_coup_gagnant(board)
             if win:
-                print(afficher_plateau(board, chemin_gagant=chemin))
+                print(afficher_plateau(board, chemin_gagnant=chemin))
                 print("le joueur X a gagné!")
                 break
             current = AI
@@ -89,13 +89,13 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
 
             if mode == 1:
                 move, score = ai.ia_aleatoire(board)
-                print(f"l'ia a choisi -> colone {move}")
+                print(f"l'ia a choisi -> colonne {move}")
             elif mode == 2:
                 move, score = ai.ia_heuristique(board, AI)
-                print(f"l'ia a choisi -> colone {move} avec le score {score}")
+                print(f"l'ia a choisi -> colonne {move} avec le score {score}")
             else:
                 move, score = ai.ia_minimax(board, AI)
-                print(f"l'ia a choisi -> colone {move} avec le score {score}")
+                print(f"l'ia a choisi -> colonne {move} avec le score {score}")
 
             if move is None:
                 print("l'ia ne peut plus bouger.")
@@ -105,7 +105,7 @@ def jouer_au_jeu(lignes: int = 6, colones: int = 7):
 
             win, chemin = est_coup_gagnant(board)
             if win:
-                print(afficher_plateau(board, chemin_gagant=chemin))
+                print(afficher_plateau(board, chemin_gagnant=chemin))
                 print("l'ia O a gagnée!")
                 break
 
