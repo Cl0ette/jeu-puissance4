@@ -29,5 +29,5 @@ Aligner **4 pions consécutifs** de sa couleur et de son symbole (horizontalemen
 ## Variantes
 - Choix de l’IA (`random`, `heuristic`, `minimax`).
 - Profondeur de recherche ajustable pour minimax.
-- Choix du nombre de lignes et de colonnes possible
+- Choix du nombre de lignes et de colonnes possible.
 
