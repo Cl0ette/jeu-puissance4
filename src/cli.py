@@ -37,10 +37,10 @@ def afficher_plateau(board: Board, chemin_gagnant=None):
 def demander_colonne(board: Board):
     while True:
         try:
-            raw = input(f"choisir une colonne (0-{board.colonnes-1}) ou 'q' pour quitter: ").strip()
-            if raw.lower() in ('q', 'quit', 'exit'):
+            saisie = input(f"choisir une colonne (0-{board.colonnes-1}) ou 'q' pour quitter: ").strip()
+            if saisie.lower() in ('q', 'quit', 'exit'):
                 return None
-            colonne = int(raw)
+            colonne = int(saisie)
             if not board.est_valide(colonne):
                 print("colonne invalide. Veuillez en choisir une autre.")
                 continue
@@ -62,11 +62,11 @@ def choisir_mode():
 def jouer_au_jeu(lignes: int = 6, colonnes: int = 7):
     board = Board(lignes=lignes, colonnes=colonnes)
     mode = choisir_mode()
-    current = PLAYER
+    joueur_actuel = PLAYER
     while True:
         print(afficher_plateau(board))
 
-        if current == PLAYER:
+        if joueur_actuel == PLAYER:
             colonne = demander_colonne(board)
             if colonne is None:
                 print("le joueur a quitter la partie.")
@@ -79,7 +79,7 @@ def jouer_au_jeu(lignes: int = 6, colonnes: int = 7):
                 print(afficher_plateau(board, chemin_gagnant=chemin))
                 print("le joueur X a gagné!")
                 break
-            current = AI
+            joueur_actuel = AI
 
         else:
             valid = board.sont_coup_valides()
@@ -88,20 +88,20 @@ def jouer_au_jeu(lignes: int = 6, colonnes: int = 7):
                 break
 
             if mode == 1:
-                move, score = ai.ia_aleatoire(board)
-                print(f"l'ia a choisi -> colonne {move}")
+                coup, score = ai.ia_aleatoire(board)
+                print(f"l'ia a choisi -> colonne {coup}")
             elif mode == 2:
-                move, score = ai.ia_heuristique(board, AI)
-                print(f"l'ia a choisi -> colonne {move} avec le score {score}")
+                coup, score = ai.ia_heuristique(board, AI)
+                print(f"l'ia a choisi -> colonne {coup} avec le score {score}")
             else:
-                move, score = ai.ia_minimax(board, AI)
-                print(f"l'ia a choisi -> colonne {move} avec le score {score}")
+                coup, score = ai.ia_minimax(board, AI)
+                print(f"l'ia a choisi -> colonne {coup} avec le score {score}")
 
-            if move is None:
+            if coup is None:
                 print("l'ia ne peut plus bouger.")
                 break
 
-            board.jouer_coup(move, AI)
+            board.jouer_coup(coup, AI)
 
             win, chemin = est_coup_gagnant(board)
             if win:
@@ -109,7 +109,7 @@ def jouer_au_jeu(lignes: int = 6, colonnes: int = 7):
                 print("l'ia O a gagnée!")
                 break
 
-            current = PLAYER
+            joueur_actuel = PLAYER
 
         if est_match_nul(board):
             print(afficher_plateau(board))
