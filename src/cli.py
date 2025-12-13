@@ -4,10 +4,10 @@ from src.rules import est_coup_gagnant, est_match_nul
 from src import ai as ai
 
 # Codes ANSI
-RESET = "\033[0m"
+RESET = "\033[0m" 
 ROUGE = "\033[91m"
 BLEU = "\033[94m"
-JAUNE = "\033[93m"  # utilisé pour mettre en évidence le chemin gagnant
+JAUNE = "\033[93m" 
 
 SYMBOLES = {
     EMPTY: '.',
@@ -20,7 +20,7 @@ def afficher_plateau(board: Board, chemin_gagnant=None):
     Affiche le plateau. Si chemin_gagnant est fourni, les cases du chemin gagnant
     sont affichées en doré.
     """
-    gagnant = set(chemin_gagnant) if chemin_gagnant else set()
+    gagnant = set(chemin_gagnant) if chemin_gagnant else set() #permet de réduire la complexité ce qui rend le code plus rapide
     lignes = []
     for l in range(board.lignes - 1, -1, -1):
         ligne = []
@@ -31,14 +31,14 @@ def afficher_plateau(board: Board, chemin_gagnant=None):
             else:
                 ligne.append(SYMBOLES[v])
         lignes.append(' '.join(ligne))
-    en_tete = ' '.join(str(i) for i in range(board.colonnes))
+    en_tete = ' '.join(str(i) for i in range(board.colonnes)) # rajoute les numéros de colonnes au dessus du plateau
     return en_tete + '\n' + '\n'.join(lignes)
 
 def demander_colonne(board: Board):
     while True:
         try:
-            saisie = input(f"choisir une colonne (0-{board.colonnes-1}) ou 'q' pour quitter: ").strip()
-            if saisie.lower() in ('q', 'quit', 'exit'):
+            saisie = input(f"choisir une colonne (0-{board.colonnes-1}) ou 'q' pour quitter: ").strip() #évite probleme avec les espaces
+            if saisie.lower() in ('q', 'quit', 'exit'): #met en minuscule pour éviter de faire trop d'excception
                 return None
             colonne = int(saisie)
             if not board.est_valide(colonne):
@@ -59,11 +59,11 @@ def choisir_mode():
             return int(choice)
         print("Entrer 1, 2 ou 3.")
 
-def jouer_au_jeu(lignes: int = 6, colonnes: int = 7):
+def jouer_au_jeu(lignes: int = 6, colonnes: int = 7):# fait a partir d'ia et avec des rajouts derriere
     board = Board(lignes=lignes, colonnes=colonnes)
     mode = choisir_mode()
     joueur_actuel = PLAYER
-    while True:
+    while True:   #permet de creer une boucle infini qui s'arrète avec les break
         print(afficher_plateau(board))
 
         if joueur_actuel == PLAYER:

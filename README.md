@@ -1,6 +1,6 @@
 # Puissance 4 — Projet IA
 
-Ce projet implémente le jeu **Puissance 4** en Python, avec plusieurs niveaux d’intelligence artificielle (IA) : aléatoire, heuristique et minimax.
+dans ce projet nous avons recréer le jeu **puissance 4** en Python, avec différent niveau d'intelligence artificielle: aléatoire, heuristique et minimax 
 
 ---
 
@@ -17,18 +17,13 @@ Ce projet implémente le jeu **Puissance 4** en Python, avec plusieurs niveaux d
 ---
 
 ## Installation
-Cloner le dépôt :
-
-git clone https://github.com/<votre-user>/<votre-repo>.git
-cd <votre-repo>
+aucunes instalations suplémentaires a python n'est censé etre faite.
 
 ## Lancement du jeu
-python -m src.cli
+- Ouvrir le dossier depuis vscode
 
-*J'ouvre mon dossier depuis vscode*
+- aller dans __init__.py puis faire un run python file
 
-*Je vais dans __init__.py*
+- assurez vous d'être dans le dossier racine du projet 
 
-*Je colle dans la console*
-
-*PS C:\Users\cloeh\Documents\Etude\Majeur info\Projet\jeu-puissance4> python -m src.cli*
+- écrire dans la console la commande : python -m src.cli

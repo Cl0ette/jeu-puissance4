@@ -28,7 +28,7 @@ def score_window(window, pion):  # système de récompense en fonction du nb de 
 
 def heuristic(board, pion):
     """
-    fonction qui permet de noter chacunes 
+    fonction qui permet de noter chacunes des cases du plateau 
     """
     lignes = board.lignes
     colonnes = board.colonnes

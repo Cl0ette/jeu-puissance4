@@ -1,10 +1,10 @@
-lignes = 6   #pour modifier le nb de lignes ou de colonnes, il faut les modifié a la main dans l appel de la fonction jouer_au_jeu derniere ligne de src.cli
+lignes = 6   
 colonnes = 7
 EMPTY = 0
 PLAYER = 1
 AI = 2
 
-# Codes ANSI pour les couleurs fait a partir d une vidéo yt et ia
+# Codes ANSI pour les couleurs
 RESET = "\033[0m"
 ROUGE = "\033[91m"
 JAUNE = "\033[93m"
@@ -17,7 +17,7 @@ class Board:
     Chaque colonne est une liste de hauteur `lignes`, index 0 = bas.
     """
 
-    def __init__(self, lignes=lignes, colonnes=colonnes):
+    def __init__(self, lignes=lignes, colonnes=colonnes): # initialise
         self.lignes = lignes
         self.colonnes = colonnes
         self.grille = [[EMPTY for _ in range(lignes)] for _ in range(colonnes)]  # plateau vide
@@ -39,7 +39,7 @@ class Board:
         self.dernier_coup = (colonne, ligne, pion)
         return ligne
 
-    def annuler(self, colonne):  # supprime le dernier coup joué  
+    def annuler(self, colonne):  # supprime le dernier coup joué  ( utile pourr les ia)
         if not (0 <= colonne < self.colonnes):
             raise ValueError("Colonne invalide")
         if self.hauteurs[colonne] == 0:
@@ -49,10 +49,10 @@ class Board:
         self.grille[colonne][ligne] = EMPTY
         self.dernier_coup = None
 
-    def est_plein(self):  # plateau plein ?
+    def est_plein(self):  # renvoie true si toutes les conditions sont respectés(le plateau est plein) false sinon
         return all(h == self.lignes for h in self.hauteurs)
 
-    def __str__(self):
+    def __str__(self): # sert a afficher le plateau mais on ne s en sers plus on se sert de afficher plateau
         lignes = []
         for l in range(self.lignes - 1, -1, -1):
             line = []

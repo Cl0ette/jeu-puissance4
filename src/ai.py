@@ -49,7 +49,7 @@ def ia_heuristique(board, pion):
     meilleur_coup = None
     for m in coups:
         board.jouer_coup(m, pion)
-        s = heuristic(board, pion)  # <-- ta fonction avec les fenêtres
+        s = heuristic(board, pion) 
         board.annuler(m)
         if meilleur_score is None or s > meilleur_score:
             meilleur_score = s
@@ -68,9 +68,9 @@ def minimax(board, depth, maximizingPlayer, pion): # développé à partir du mo
     if maximizingPlayer:
         maxEval = float("-inf") #poids de l'arc du graphe
         for m in coups: # cherche poids maximum parmi arcs sortants
-            board.jouer_coup(m, pion) # parcourt chaque arc sortant du nœud courant
+            board.jouer_coup(m, pion) # parcourt chaque arc sortant du noeud courant
             eval = minimax(board, depth-1, False, pion) # explore récursivement 
-            board.annuler(m) # revient au nœud courant (comme si remontait dans graphe)
+            board.annuler(m) # revient au noeud courant (comme si remontait dans un graphe)
             maxEval = max(maxEval, eval) # sélection du poids maximum
         return maxEval
     else:

@@ -1,7 +1,7 @@
 # src/rules.py
 from src.board import EMPTY, PLAYER, AI
 
-def scan(board, colonne, ligne, pion):
+def scan(board, colonne, ligne, pion):#aide ia
     """
     permet de retracer les chemins (utile juste pour coup gagnant)
     """
